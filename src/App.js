@@ -2,6 +2,10 @@ import React, { useState } from "react";
 import "./App.css";
 
 function App() {
+  const baseURL = window.location.hostname === "localhost"
+    ? "http://127.0.0.1:6000"
+    : "https://trademark-identification-back.onrender.com";
+
   const [file, setFile] = useState(null);
   const [imageUrl, setImageUrl] = useState("");
   const [resultMessage, setResultMessage] = useState("");
@@ -20,7 +24,7 @@ function App() {
     formData.append("file", file);
 
     try {
-      const response = await fetch("http://127.0.0.1:5000/upload", {
+      const response = await fetch(`${baseURL}/upload`, {
         method: "POST",
         body: formData,
       });
