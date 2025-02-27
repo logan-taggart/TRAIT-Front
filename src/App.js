@@ -3,7 +3,7 @@ import "./App.css";
 
 function App() {
   const baseURL = window.location.hostname === "localhost"
-    ? "http://127.0.0.1:6000"
+    ? "http://127.0.0.1:3001"
     : "https://trademark-identification-back.onrender.com";
 
   const [file, setFile] = useState(null);
@@ -24,7 +24,7 @@ function App() {
     formData.append("file", file);
 
     try {
-      const response = await fetch(`${baseURL}/upload`, {
+      const response = await fetch(`${baseURL}/image/detect-all`, {
         method: "POST",
         body: formData,
       });
