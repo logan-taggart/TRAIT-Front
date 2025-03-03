@@ -52,7 +52,7 @@ function App() {
   };
 
   return (
-    <div className="App">
+    <div className="">
       <header className="main-header">
         <h1>TRAIT</h1>
         <p>Trademark Identification & Analysis Tool</p>
@@ -75,7 +75,7 @@ function App() {
           )}
         </div>
 
-        <div className="options-section">
+        <div className="">
           <DetectionOptions
             detectionMode={detectionMode}
             setDetectionMode={setDetectionMode}
