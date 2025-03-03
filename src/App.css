@@ -32,7 +32,6 @@
   from {
     transform: rotate(0deg);
   }
-
   to {
     transform: rotate(360deg);
   }
@@ -120,4 +119,51 @@
   text-align: center;
   color: white;
   font-size: 16px;
+}
+
+/* New Styles for Organized Layout */
+.upload-section {
+  margin-bottom: 20px;
+}
+
+.options-section {
+  margin-bottom: 20px;
+  width: 60%;
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 20px;
+  border-radius: 10px;
+  border: 2px solid white;
+}
+
+.confidence-threshold {
+  margin-top: 20px;
+}
+
+.confidence-threshold label {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: white;
+}
+
+.confidence-threshold input[type="range"] {
+  width: 100%;
+  cursor: pointer;
+}
+
+.result-display {
+  margin-top: 20px;
+  width: 60%;
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 20px;
+  border-radius: 10px;
+  border: 2px solid white;
+  color: white;
+  font-size: 16px;
+}
+
+.result-display img {
+  max-width: 100%;
+  border-radius: 10px;
+  margin-top: 10px;
 }

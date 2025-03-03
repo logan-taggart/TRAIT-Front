@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import UploadSection from "./UploadSection";
+import DetectionOptions from "./DetectionOptions";
+import ResultDisplay from "./ResultDisplay";
 import "./App.css";
 
 function App() {
@@ -8,24 +11,29 @@ function App() {
 
   const [mainFile, setMainFile] = useState(null);
   const [referenceFile, setReferenceFile] = useState(null);
+  const [detectionMode, setDetectionMode] = useState("all"); // "all" or "specific"
+  const [confidenceThreshold, setConfidenceThreshold] = useState(50);
+  const [embeddingAlgorithm, setEmbeddingAlgorithm] = useState("default");
   const [imageUrl, setImageUrl] = useState("");
   const [resultMessage, setResultMessage] = useState("");
 
-  const handleFileChange = (event, setFile) => {
-    setFile(event.target.files[0]);
-  };
-
-  const handleMainSubmit = async () => {
-    if (!mainFile) {
-      setResultMessage("Please upload a main image first.");
+  const handleSubmit = async () => {
+    if (!mainFile || (detectionMode === "specific" && !referenceFile)) {
+      setResultMessage("Please upload the required images.");
       return;
     }
 
     const formData = new FormData();
     formData.append("main_image", mainFile);
+    if (detectionMode === "specific") {
+      formData.append("reference_image", referenceFile);
+    }
+    formData.append("confidence", confidenceThreshold);
+    formData.append("algorithm", embeddingAlgorithm);
 
+    const endpoint = detectionMode === "all" ? "/image/detect-all" : "/image/detect-specific";
     try {
-      const response = await fetch(`${baseURL}/image/detect-all`, {
+      const response = await fetch(`${baseURL}${endpoint}`, {
         method: "POST",
         body: formData,
       });
@@ -33,41 +41,12 @@ function App() {
       if (response.ok) {
         const blob = await response.blob();
         setImageUrl(URL.createObjectURL(blob));
-        setResultMessage("Main file processed successfully!");
+        setResultMessage("Processing completed successfully!");
       } else {
         setResultMessage("Processing failed. Try again.");
       }
     } catch (error) {
-      setResultMessage("Error processing the main image.");
-      console.error(error);
-    }
-  };
-
-  const handleComparisonSubmit = async () => {
-    if (!mainFile || !referenceFile) {
-      setResultMessage("Please upload both a main and reference image.");
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append("main_image", mainFile);
-    formData.append("reference_image", referenceFile);
-
-    try {
-      const response = await fetch(`${baseURL}/image/detect-specific`, {
-        method: "POST",
-        body: formData,
-      });
-
-      if (response.ok) {
-        const blob = await response.blob();
-        setImageUrl(URL.createObjectURL(blob));
-        setResultMessage("Comparison completed successfully!");
-      } else {
-        setResultMessage("Comparison failed. Try again.");
-      }
-    } catch (error) {
-      setResultMessage("Error processing the comparison.");
+      setResultMessage("Error processing the image.");
       console.error(error);
     }
   };
@@ -80,35 +59,49 @@ function App() {
       </header>
 
       <div className="App-header">
-        <div className="file-upload-container">
-          <div className="file-box">
-            <label htmlFor="fileUpload" className="file-label">
-              {mainFile ? mainFile.name : "Click to Upload Main Image"}
-            </label>
-            <input id="fileUpload" type="file" onChange={(e) => handleFileChange(e, setMainFile)} />
-          </div>
+        <div className="upload-section">
+          <UploadSection
+            label="Upload Main Image"
+            file={mainFile}
+            setFile={setMainFile}
+          />
+
+          {detectionMode === "specific" && (
+            <UploadSection
+              label="Upload Reference Logo"
+              file={referenceFile}
+              setFile={setReferenceFile}
+            />
+          )}
         </div>
 
-        <div className="file-upload-container">
-          <div className="file-box">
-            <label htmlFor="fileUpload2" className="file-label">
-              {referenceFile ? referenceFile.name : "Click to Upload Reference Image"}
-            </label>
-            <input id="fileUpload2" type="file" onChange={(e) => handleFileChange(e, setReferenceFile)} />
-          </div>
+        <div className="options-section">
+          <DetectionOptions
+            detectionMode={detectionMode}
+            setDetectionMode={setDetectionMode}
+            embeddingAlgorithm={embeddingAlgorithm}
+            setEmbeddingAlgorithm={setEmbeddingAlgorithm}
+          />
+
+          {detectionMode === "specific" && (
+            <div className="confidence-threshold">
+              <label>Confidence Threshold: {confidenceThreshold}%</label>
+              <input
+                type="range"
+                min="0"
+                max="100"
+                value={confidenceThreshold}
+                onChange={(e) => setConfidenceThreshold(e.target.value)}
+              />
+            </div>
+          )}
         </div>
 
-        <button className="submit-button" onClick={handleMainSubmit}>
-          Submit for Detection (Main Image Only)
+        <button className="submit-button" onClick={handleSubmit}>
+          Submit for Detection
         </button>
-        <button className="submit-button" onClick={handleComparisonSubmit}>
-          Submit for Comparison (Both Images)
-        </button>
 
-        <div className="results-box">
-          {resultMessage && <p>{resultMessage}</p>}
-          {imageUrl && <img src={imageUrl} alt="Processed Result" className="result-image" />}
-        </div>
+        <ResultDisplay resultMessage={resultMessage} imageUrl={imageUrl} />
       </div>
     </div>
   );
