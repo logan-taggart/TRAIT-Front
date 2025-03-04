@@ -1,8 +1,11 @@
 import React from "react";
+import ToolTipDropDown from "./ToolTipDropDown";
 
 const ConfidenceThresholdInput = ({
   confidenceThreshold,
   setConfidenceThreshold,
+  thresholdTitle,
+  tooltipDescription,
 }) => {
   const handleInputChange = (e) => {
     const value = e.target.value;
@@ -31,24 +34,26 @@ const ConfidenceThresholdInput = ({
     }
   };
 
+  // Input field and range slider for the threshold
   return (
     <div className="confidence-threshold mt-6">
-      <label>
-        Confidence Threshold:
-        <input
+      
+      <div className='text-base font-medium'>
+        {thresholdTitle}{": "}<ToolTipDropDown description={tooltipDescription} />
+        <input 
           className="input w-16 input-primary"
           placeholder={confidenceThreshold}
           onChange={handleInputChange}
           value={confidenceThreshold}
         />%
-      </label>
+      </div>
       <input
         type="range"
         min="0"
         max="100"
         value={confidenceThreshold}
         onChange={(e) => setConfidenceThreshold(e.target.value)}
-        className="range"
+        className="range range-primary"
       />
     </div>
   );

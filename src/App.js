@@ -14,6 +14,7 @@ function App() {
   const [referenceFile, setReferenceFile] = useState(null);
   const [detectionMode, setDetectionMode] = useState("all"); // "all" or "specific"
   const [confidenceThreshold, setConfidenceThreshold] = useState(50);
+  const [boundingBoxThreshold, setBoundingBoxThreshold] = useState(50); // Use this as a threshold of when to draw the bounding box around a logo
   const [embeddingAlgorithm, setEmbeddingAlgorithm] = useState("default");
   const [imageUrl, setImageUrl] = useState("");
   const [resultMessage, setResultMessage] = useState("");
@@ -84,6 +85,8 @@ function App() {
             setEmbeddingAlgorithm={setEmbeddingAlgorithm}
             setConfidenceThreshold={setConfidenceThreshold}
             confidenceThreshold={confidenceThreshold}
+            setBoundingBoxThreshold={setBoundingBoxThreshold}
+            boundingBoxThreshold={boundingBoxThreshold}
           />
 
         </div>

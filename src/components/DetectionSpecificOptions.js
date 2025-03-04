@@ -1,5 +1,5 @@
 import React from 'react';
-import ConfidenceThresholdInput from './ConfidenceThresholdInput';
+import ThresholdInput from './ThresholdInput';
 
 // Displays the Embedding Algorithm and Confidence Threshold options for specific detection mode
 const DetectionSpecificOptions = ({detectionMode, embeddingAlgorithm, setEmbeddingAlgorithm, confidenceThreshold, setConfidenceThreshold,}) => {
@@ -23,9 +23,11 @@ const DetectionSpecificOptions = ({detectionMode, embeddingAlgorithm, setEmbeddi
 
       {/* The is the slider for the user to choose confidence threshold */}
       {detectionMode === "specific" && (
-          <ConfidenceThresholdInput
+          <ThresholdInput
+            thresholdTitle={"Confidence Threshold"}
             confidenceThreshold={confidenceThreshold}
             setConfidenceThreshold={setConfidenceThreshold}
+            tooltipDescription={"blah blah blah confidence threshold"}
           />
         )}
       

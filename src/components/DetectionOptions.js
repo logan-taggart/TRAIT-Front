@@ -1,5 +1,6 @@
 import React from "react";
 import DetectionSpecificOptions from './DetectionSpecificOptions.js';
+import ThresholdInput from "./ThresholdInput.js";
 
 const DetectionOptions = ({
   detectionMode,
@@ -8,6 +9,8 @@ const DetectionOptions = ({
   setConfidenceThreshold,
   embeddingAlgorithm,
   setEmbeddingAlgorithm,
+  setBoundingBoxThreshold,
+  boundingBoxThreshold,
 }) => {
   const handleDetectionModeChange = (mode) => {
     setDetectionMode(mode);
@@ -33,14 +36,24 @@ const DetectionOptions = ({
         >
           Search Specific Logo
         </button>
+
+        <ThresholdInput
+            thresholdTitle={"Bounding Box Threshold"}
+            confidenceThreshold={boundingBoxThreshold}
+            setConfidenceThreshold={setBoundingBoxThreshold}
+            tooltipDescription={"blah blah blah bounding box threshold"}
+          />
         
       </div>
       
-      <DetectionSpecificOptions detectionMode={detectionMode}
-            embeddingAlgorithm={embeddingAlgorithm}
-            setEmbeddingAlgorithm={setEmbeddingAlgorithm}
-            confidenceThreshold={confidenceThreshold}
-            setConfidenceThreshold={setConfidenceThreshold}/>
+      <DetectionSpecificOptions 
+          detectionMode={detectionMode}
+          embeddingAlgorithm={embeddingAlgorithm}
+          setEmbeddingAlgorithm={setEmbeddingAlgorithm}
+          confidenceThreshold={confidenceThreshold}
+          setConfidenceThreshold={setConfidenceThreshold}
+          />
+
     </fieldset>
     </div>
   );
