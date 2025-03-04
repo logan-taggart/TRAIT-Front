@@ -19,6 +19,8 @@ function App() {
   const [imageUrl, setImageUrl] = useState("");
   const [resultMessage, setResultMessage] = useState("");
 
+  
+
   const handleSubmit = async () => {
     if (!mainFile || (detectionMode === "specific" && !referenceFile)) {
       setResultMessage("Please upload the required images.");
@@ -61,7 +63,7 @@ function App() {
       </header>
 
       <div className="App-header">
-        <div className="upload-section">
+        <div className="mb-2 flex gap-4">
           <UploadSection
             label="Upload Main Image"
             file={mainFile}

@@ -1,5 +1,5 @@
 import React from "react";
-import DetectionSpecificOptions from './DetectionSpecificOptions.js';
+import SearchSpecificLogoOptions from './SearchSpecificLogoOptions.js';
 import ThresholdInput from "./ThresholdInput.js";
 
 const DetectionOptions = ({
@@ -46,7 +46,7 @@ const DetectionOptions = ({
         
       </div>
       
-      <DetectionSpecificOptions 
+      <SearchSpecificLogoOptions 
           detectionMode={detectionMode}
           embeddingAlgorithm={embeddingAlgorithm}
           setEmbeddingAlgorithm={setEmbeddingAlgorithm}
