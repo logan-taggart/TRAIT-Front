@@ -41,7 +41,7 @@ const DetectionOptions = ({
             thresholdTitle={"Bounding Box Threshold"}
             confidenceThreshold={boundingBoxThreshold}
             setConfidenceThreshold={setBoundingBoxThreshold}
-            tooltipDescription={"blah blah blah bounding box threshold"}
+            tooltipDescription={"Bounding Box Threshold is the minimum confidence score for a bounding box to be considered, the lower the threshold, the more bounding boxes will be considered."}
           />
         
       </div>
