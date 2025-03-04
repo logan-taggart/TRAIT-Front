@@ -6,6 +6,7 @@ import "./App.css";
 
 
 function App() {
+  
   const baseURL = window.location.hostname === "localhost"
     ? "http://127.0.0.1:3001"
     : "https://trademark-identification-back.onrender.com";
