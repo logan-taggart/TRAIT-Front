@@ -58,11 +58,11 @@ function App() {
   return (
     <div className="">
       <header className="main-header">
-        <h1>TRAIT</h1>
-        <p>Trademark Identification & Analysis Tool</p>
+        <h1 className="text-2xl font-bold">TRAIT</h1>
+        <p className="text-lg">Trademark Identification & Analysis Tool</p>
       </header>
 
-      <div className="App-header">
+      <div className="App-header flex flex-col items-center justify-center text-white text-2xl">
         <div className="mb-2 flex gap-4">
           <UploadSection
             label="Upload Main Image"
@@ -93,7 +93,7 @@ function App() {
 
         </div>
 
-        <button className="submit-button" onClick={handleSubmit}>
+        <button className="mt-4 mb-4 btn btn-success btn-xl" onClick={handleSubmit}>
           Submit for Detection
         </button>
 
