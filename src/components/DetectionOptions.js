@@ -1,4 +1,5 @@
 import React from "react";
+import DetectionSpecificOptions from './DetectionSpecificOptions.js';
 
 const DetectionOptions = ({
   detectionMode,
@@ -15,19 +16,19 @@ const DetectionOptions = ({
   return (
     <div>
     <fieldset className="fieldset w-l bg-base-200 border border-base-200 p-6 rounded-box">
-      <legend class="fieldset-legend">Detection Mode</legend>
+      <legend className="fieldset-legend">Detection Mode</legend>
       <div className="detection-mode-toggle">
         
         
         <button
-          className={`btn ${detectionMode === "all" ? "btn-primary" : "btn-secondary"} mr-4`}
+          className={`btn ${detectionMode === "all" ? "btn-primary btn-active" : "btn-outline btn-secondary"} mr-4`}
           onClick={() => handleDetectionModeChange("all")}
         >
           Search All Logos
         </button>
         
         <button
-          className={`btn ${detectionMode === "specific" ? "btn-primary" : "btn-secondary"}`}
+          className={`btn ${detectionMode === "specific" ? "btn-primary btn-active" : " btn-outline btn-secondary"}`}
           onClick={() => handleDetectionModeChange("specific")}
         >
           Search Specific Logo
@@ -35,19 +36,11 @@ const DetectionOptions = ({
         
       </div>
       
-      {detectionMode === "specific" && (
-        <div className="embedding-algorithm mt-6">
-          <label>Embedding Algorithm:</label>
-          <select
-            value={embeddingAlgorithm}
-            onChange={(e) => setEmbeddingAlgorithm(e.target.value)}
-            className="select select-bordered w-full"
-          >
-            <option value="default">Default</option>
-            <option value="alternative">Alternative</option>
-          </select>
-        </div>
-      )}
+      <DetectionSpecificOptions detectionMode={detectionMode}
+            embeddingAlgorithm={embeddingAlgorithm}
+            setEmbeddingAlgorithm={setEmbeddingAlgorithm}
+            confidenceThreshold={confidenceThreshold}
+            setConfidenceThreshold={setConfidenceThreshold}/>
     </fieldset>
     </div>
   );

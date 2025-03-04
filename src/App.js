@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import UploadSection from "./UploadSection";
-import DetectionOptions from "./DetectionOptions";
-import ResultDisplay from "./ResultDisplay";
+import UploadSection from "./components/UploadSection";
+import DetectionOptions from "./components/DetectionOptions";
+import ResultDisplay from "./components/ResultDisplay";
 import "./App.css";
+
 
 function App() {
   const baseURL = window.location.hostname === "localhost"
@@ -81,20 +82,10 @@ function App() {
             setDetectionMode={setDetectionMode}
             embeddingAlgorithm={embeddingAlgorithm}
             setEmbeddingAlgorithm={setEmbeddingAlgorithm}
+            setConfidenceThreshold={setConfidenceThreshold}
+            confidenceThreshold={confidenceThreshold}
           />
 
-          {detectionMode === "specific" && (
-            <div className="confidence-threshold">
-              <label>Confidence Threshold: {confidenceThreshold}%</label>
-              <input
-                type="range"
-                min="0"
-                max="100"
-                value={confidenceThreshold}
-                onChange={(e) => setConfidenceThreshold(e.target.value)}
-              />
-            </div>
-          )}
         </div>
 
         <button className="submit-button" onClick={handleSubmit}>
