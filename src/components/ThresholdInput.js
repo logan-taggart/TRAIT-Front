@@ -38,7 +38,7 @@ const ConfidenceThresholdInput = ({
   return (
     <div className="confidence-threshold mt-6">
       
-      <div className='text-base font-medium'>
+      <div className='text-base font-medium mb-1'>
         {thresholdTitle}{": "}<ToolTipDropDown description={tooltipDescription} />
         <input 
           className="input w-16 input-primary"

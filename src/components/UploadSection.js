@@ -44,14 +44,14 @@ const UploadSection = ({ label, file, setFile }) => {
   };
 
   return (
-    <div className="card card-dash bg-base-100 w-96 p-4">
+    <div className="card card-dash bg-base-100 w-96 p-4 justify-center">
       <div
-        className={`border-4 border-dashed p-4 rounded-md cursor-pointer ${
+        className={`border-4 border-dashed p-4 h-full rounded-md cursor-pointer ${
           imagePreview ? "border-transparent" : "border-primary"
         }`}
         onClick={handleClick} // Trigger the file input click when the dashed border is clicked
       >
-        <div className="flex justify-center items-center">
+        <div className="flex justify-center items-center h-full">
           {/* If an image is selected, replace label with the image preview */}
           {imagePreview ? (
             <div className="w-full h-full relative cursor-pointer">
@@ -60,9 +60,9 @@ const UploadSection = ({ label, file, setFile }) => {
                 alt="Preview"
                 className="w-full h-full object-cover rounded-md"
               />
-            </div>
-          ) : (
-            <span className="text-primary">{file ? file.name : label}</span>
+            </div> ) : 
+          (
+            <span className="text-primary text-center w-full"> {file ? file.name : label} </span>
           )}
         </div>
       </div>
