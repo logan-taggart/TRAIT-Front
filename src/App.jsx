@@ -16,7 +16,6 @@ function App() {
   const [detectionMode, setDetectionMode] = useState("all");
   const [confidenceThreshold, setConfidenceThreshold] = useState(50);
   const [boundingBoxThreshold, setBoundingBoxThreshold] = useState(50);
-  const [embeddingAlgorithm, setEmbeddingAlgorithm] = useState("default");
   const [imageUrl, setImageUrl] = useState("");
   const [resultMessage, setResultMessage] = useState("");
 
@@ -32,9 +31,10 @@ function App() {
     formData.append("main_image", mainFile);
     if (detectionMode === "specific") {
       formData.append("reference_image", referenceFile);
+      formData.append("confidence", confidenceThreshold);
     }
-    formData.append("confidence", confidenceThreshold);
-    formData.append("algorithm", embeddingAlgorithm);
+    formData.append("bounding_box_threshold", boundingBoxThreshold);
+    
 
     const endpoint = detectionMode === "all" ? "/image/detect-all" : "/image/detect-specific";
     try {
@@ -84,8 +84,6 @@ function App() {
           <DetectionOptions
             detectionMode={detectionMode}
             setDetectionMode={setDetectionMode}
-            embeddingAlgorithm={embeddingAlgorithm}
-            setEmbeddingAlgorithm={setEmbeddingAlgorithm}
             setConfidenceThreshold={setConfidenceThreshold}
             confidenceThreshold={confidenceThreshold}
             setBoundingBoxThreshold={setBoundingBoxThreshold}

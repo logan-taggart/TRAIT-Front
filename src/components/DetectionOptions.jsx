@@ -1,14 +1,12 @@
 import React from "react";
 import SearchSpecificLogoOptions from './SearchSpecificLogoOptions';
 import ThresholdInput from "./ThresholdInput";
-
+import ConfidenceThresholdInput from "./ConfidenceThresholdInput";  
 const DetectionOptions = ({
     detectionMode,
     setDetectionMode,
     confidenceThreshold,
     setConfidenceThreshold,
-    embeddingAlgorithm,
-    setEmbeddingAlgorithm,
     setBoundingBoxThreshold,
     boundingBoxThreshold,
 }) => {
@@ -39,17 +37,16 @@ const DetectionOptions = ({
 
                     <ThresholdInput
                         thresholdTitle={"Bounding Box Threshold"}
-                        confidenceThreshold={boundingBoxThreshold}
-                        setConfidenceThreshold={setBoundingBoxThreshold}
+                        boundingThreshold={boundingBoxThreshold}
+                        setBoundingThreshold={setBoundingBoxThreshold}
                         tooltipDescription={"Bounding Box Threshold is the minimum confidence score for a bounding box to be considered, the lower the threshold, the more bounding boxes will be considered."}
                     />
-
+                     
+                 
                 </div>
 
                 <SearchSpecificLogoOptions
                     detectionMode={detectionMode}
-                    embeddingAlgorithm={embeddingAlgorithm}
-                    setEmbeddingAlgorithm={setEmbeddingAlgorithm}
                     confidenceThreshold={confidenceThreshold}
                     setConfidenceThreshold={setConfidenceThreshold}
                 />

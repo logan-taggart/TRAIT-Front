@@ -1,9 +1,9 @@
 import React from "react";
 import ToolTipDropDown from "./ToolTipDropDown";
 
-const ConfidenceThresholdInput = ({
-    confidenceThreshold,
-    setConfidenceThreshold,
+const ThresholdInput = ({
+    boundingThreshold,
+    setBoundingThreshold,
     thresholdTitle,
     tooltipDescription,
 }) => {
@@ -22,14 +22,14 @@ const ConfidenceThresholdInput = ({
             // Ensure the value is within the range [0, 100]
             if (!isNaN(parsedValue)) {
                 if (parsedValue <= 0) {
-                    setConfidenceThreshold(0);
+                    setBoundingThreshold(0);
                 } else if (parsedValue >= 100) {
-                    setConfidenceThreshold(100);
+                    setBoundingThreshold(100);
                 } else {
-                    setConfidenceThreshold(value);
+                    setBoundingThreshold(value);
                 }
             } else if (value === "") {
-                setConfidenceThreshold(""); // Allow the input to be empty
+                setBoundingThreshold(""); // Allow the input to be empty
             }
         }
     };
@@ -42,21 +42,21 @@ const ConfidenceThresholdInput = ({
                 {thresholdTitle}{": "}<ToolTipDropDown description={tooltipDescription} />
                 <input
                     className="input w-16 input-primary"
-                    placeholder={confidenceThreshold}
+                    placeholder={boundingThreshold}
                     onChange={handleInputChange}
-                    value={confidenceThreshold}
+                    value={boundingThreshold}
                 />%
             </div>
             <input
                 type="range"
                 min="0"
                 max="100"
-                value={confidenceThreshold}
-                onChange={(e) => setConfidenceThreshold(e.target.value)}
+                value={boundingThreshold}
+                onChange={(e) => setBoundingThreshold(e.target.value)}
                 className="range range-primary"
             />
         </div>
     );
 };
 
-export default ConfidenceThresholdInput;
+export default ThresholdInput;
