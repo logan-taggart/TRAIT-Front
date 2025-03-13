@@ -29,6 +29,6 @@ def detect_specific():
     main_image = request.files["main_image"]
     reference_image = request.files["reference_image"]
     embedding_model = request.form.get("algorithm")
-    similarity_threshold = request.form.get("confidence")
+    similarity_threshold = int(request.form.get("confidence"))
 
-    return compare_logo_embeddings(main_image, reference_image, model, 4)
+    return compare_logo_embeddings(main_image, reference_image, model, similarity_threshold)
