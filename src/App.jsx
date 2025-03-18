@@ -18,6 +18,7 @@ function App() {
   const [boundingBoxThreshold, setBoundingBoxThreshold] = useState(50);
   const [imageUrl, setImageUrl] = useState("");
   const [resultMessage, setResultMessage] = useState("");
+  const [boundingBoxInfo, setBoundingBoxInfo] = useState([]);
 
 
 
@@ -44,8 +45,14 @@ function App() {
       });
 
       if (response.ok) {
-        const blob = await response.blob();
-        setImageUrl(URL.createObjectURL(blob));
+        // Now fetch a json object
+        // Object contains the output image and bouding box information
+        const data = await response.json();
+        // console.log(data)
+        // Save the image url from the data object. 
+        setImageUrl(`data:image/jpeg;base64,${data.image}`);
+        // Save the bounding box information from the data object.
+        setBoundingBoxInfo(data.bounding_boxes);
         setResultMessage("Processing completed successfully!");
       } else {
         setResultMessage("Processing failed. Try again.");
@@ -55,6 +62,8 @@ function App() {
       console.error(error);
     }
   };
+
+  console.log(boundingBoxInfo)
 
   return (
     <div className="">

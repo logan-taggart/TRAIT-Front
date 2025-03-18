@@ -1,11 +1,12 @@
 import cv2
-from flask import send_file
+from flask import send_file, jsonify
 import io
 from models.model_load import model
 import numpy as np
 from PIL import Image
 from sklearn.metrics.pairwise import cosine_similarity, euclidean_distances
 from utils.embed import *
+import base64
 
 
 def compare_logo_embeddings(input_path, reference_path, model, score_threshold):
@@ -133,12 +134,45 @@ def identify_all_logos(file):
     color = (255, 255, 255)
     thickness = 2
 
+    # Get the image width and height
+    image_height, image_width = img.shape[:2]
+    # Get the total image area
+    total_image_area = image_width * image_height
+
+    # Use this to send bounding box info back to frontend
+    bounding_boxes_info = []
+
     for box in results[0].boxes:
         if box.conf[0].item() > confidence_threshold:
             xyxy = box.xyxy[0].tolist()
             x1, y1, x2, y2 = map(int, xyxy)
+
+            # Calculate the bounding box area
+            box_width = x2 - x1
+            box_height = y2 - y1
+            box_area = box_width * box_height
+
+            # Calculate percentage coverage of the logo within the image
+            coverage_percentage = (box_area / total_image_area) * 100
+
+            bounding_boxes_info.append({
+                "x1": x1,
+                "y1": y1,
+                "x2": x2,
+                "y2": y2,
+                "box_width": box_width,
+                "box_height": box_height,
+                "box_area": box_area,
+                "box_coverage_percentage": coverage_percentage
+            })
+
             cv2.rectangle(img, (x1, y1), (x2, y2), color, thickness)
 
     _, img_encoded = cv2.imencode(".jpg", img)
+    # Make image base64 so it can be jsonifyed.
+    img_base64 = base64.b64encode(img_encoded.tobytes()).decode("utf-8")
 
-    return send_file(io.BytesIO(img_encoded.tobytes()), mimetype="image/jpeg")
+    return jsonify({
+        "bounding_boxes": bounding_boxes_info,
+        "image": img_base64
+    })
