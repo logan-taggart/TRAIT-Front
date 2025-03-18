@@ -77,12 +77,12 @@ def compare_logo_embeddings(input_path, reference_path, model, score_threshold):
                 color = (255, 255, 255)
                 cv2.rectangle(input_img, (x1, y1), (x2, y2), color, 2)
 
-                box_area = (x2 - x1) * (y2 - y1)
-                box_height = y2 - y1
+                box_area = round((x2 - x1) * (y2 - y1), 2)
+                box_height = round(y2 - y1, 2)
                 box_width = x2 - x1
                 image_height, image_width = input_img.shape[:2]
                 total_image_area = image_width * image_height
-                coverage_percentage = (box_area / total_image_area) * 100
+                coverage_percentage = round((box_area / total_image_area) * 100, 2)
                 # Add bounding box information to bounding_boxes_info
                 bounding_boxes_info.append({
                     "x1": x1,
@@ -178,12 +178,12 @@ def identify_all_logos(file):
             x1, y1, x2, y2 = map(int, xyxy)
 
             # Calculate the bounding box area
-            box_width = x2 - x1
-            box_height = y2 - y1
-            box_area = box_width * box_height
+            box_width = round(x2 - x1, 2)
+            box_height = round(y2 - y1, 2)
+            box_area = round(box_width * box_height, 2)
 
             # Calculate percentage coverage of the logo within the image
-            coverage_percentage = (box_area / total_image_area) * 100
+            coverage_percentage = round((box_area / total_image_area) * 100, 2)
 
             # Save all of the bounding box info into this dict. This is sent to frontend
             bounding_boxes_info.append({

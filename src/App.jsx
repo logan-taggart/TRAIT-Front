@@ -63,8 +63,6 @@ function App() {
     }
   };
 
-  console.log(boundingBoxInfo)
-
   return (
     <div className="">
       <header className="main-header">
