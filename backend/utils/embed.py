@@ -1,11 +1,12 @@
 import torch
 from torchvision import transforms
-from torchvision.models import resnet50
-from transformers import BeitImageProcessor, BeitModel, CLIPModel, CLIPProcessor
+from torchvision.models import resnet50, ResNet50_Weights
+from transformers import AutoImageProcessor, BeitModel, CLIPModel, CLIPProcessor
 
 class BEiTEmbedding:
     def __init__(self, model_name="microsoft/beit-base-patch16-224"):
-        self.feature_extractor = BeitImageProcessor.from_pretrained(model_name) 
+        # Now uses AutoImageProcessor. This is basically the same thing as the BEiTProcessor but without the warnings
+        self.feature_extractor = AutoImageProcessor.from_pretrained(model_name) 
         self.model = BeitModel.from_pretrained(model_name)
 
     def extract_embedding(self, img):
@@ -28,7 +29,7 @@ class CLIPEmbedding:
 
 class ResNetEmbedding:
     def __init__(self, model_name="resnet50"):
-        self.model = resnet50(pretrained=True)
+        self.model = resnet50(weights=ResNet50_Weights.IMAGENET1K_V1)
         self.model.eval()
         self.transform = transforms.Compose([
             transforms.Resize(256),

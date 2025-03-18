@@ -80,13 +80,13 @@ def compare_logo_embeddings(input_path, reference_path, model, score_threshold):
 
 
 def compute_cosine_similarity(embedding1, embedding2):
-
-    return cosine_similarity(embedding1, embedding2)[0]
+    
+    return cosine_similarity(embedding1, embedding2)[0][0]
 
 
 def compute_euclidean_distances(embedding1, embedding2):
     
-    return euclidean_distances(embedding1, embedding2)[0]
+    return euclidean_distances(embedding1, embedding2)[0][0]
 
 
 def extract_logo_regions(image, model):
