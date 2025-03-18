@@ -29,6 +29,8 @@ def compare_logo_embeddings(input_path, reference_path, model, score_threshold):
     # This keeps the scores separate for each reference logo found
     scores = [[0] * len(input_logos) for _ in range(len(reference_logos))]
 
+    bounding_boxes_info = []  # Will contain bounding box data
+
     # For each embedding model
     for feature_extractor in embedding_models:
          # Get the name of the embedding model so we can index the thresholds dict
@@ -75,9 +77,30 @@ def compare_logo_embeddings(input_path, reference_path, model, score_threshold):
                 color = (255, 255, 255)
                 cv2.rectangle(input_img, (x1, y1), (x2, y2), color, 2)
 
-    _, img_encoded = cv2.imencode(".jpg", input_img)
+                box_area = (x2 - x1) * (y2 - y1)
+                box_height = y2 - y1
+                box_width = x2 - x1
+                image_height, image_width = input_img.shape[:2]
+                total_image_area = image_width * image_height
+                coverage_percentage = (box_area / total_image_area) * 100
+                # Add bounding box information to bounding_boxes_info
+                bounding_boxes_info.append({
+                    "x1": x1,
+                    "y1": y1,
+                    "x2": x2,
+                    "y2": y2,
+                    "box_width": box_width,
+                    "box_height":box_height,
+                    "box_area": box_area,
+                    "box_coverage_percentage": coverage_percentage,
+                    "cropped_logo": img_to_base64(input_img[y1:y2, x1:x2])
+                })
 
-    return jsonify({"image": img_to_base64(input_img)})
+    return jsonify({
+        "bounding_boxes": bounding_boxes_info,
+        "image": img_to_base64(input_img)
+    })
+    
 
 
 def compute_cosine_similarity(embedding1, embedding2):

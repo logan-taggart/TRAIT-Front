@@ -14,7 +14,7 @@ function App() {
   const [mainFile, setMainFile] = useState(null);
   const [referenceFile, setReferenceFile] = useState(null);
   const [detectionMode, setDetectionMode] = useState("all");
-  const [confidenceThreshold, setConfidenceThreshold] = useState(50);
+  const [confidenceThreshold, setConfidenceThreshold] = useState(3);
   const [boundingBoxThreshold, setBoundingBoxThreshold] = useState(50);
   const [imageUrl, setImageUrl] = useState("");
   const [resultMessage, setResultMessage] = useState("");

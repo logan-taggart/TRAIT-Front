@@ -2,21 +2,21 @@ import React from "react";
 
 const ResultDisplay = ({ resultMessage, imageUrl, boundingBoxInfo}) => {
 
-    let cropped = null;
-    if (boundingBoxInfo) {
-        cropped = boundingBoxInfo.map((box, index) => {
-            return (
-                <div key={index} className="w-full h-full relative">
-                    <img
-                        src={`data:image/jpeg;base64,${box.cropped_logo}`}
-                        alt="Cropped Image"
-                        className="w-full h-full object-contain rounded-md" // Matching the preview style
-                        style={{ maxWidth: "100%", maxHeight: "300px" }} // Ensures the result image is within the same size limit
-                    />
-                </div>
-            );
-        });
-    }
+    
+    
+    const cropped = boundingBoxInfo.map((box, index) => {
+        return (
+            <div key={index} className="w-full h-full relative">
+                <img
+                    src={`data:image/jpeg;base64,${box.cropped_logo}`}
+                    alt="Cropped Image"
+                    className="w-full h-full object-contain rounded-md" // Matching the preview style
+                    style={{ maxWidth: "100%", maxHeight: "300px" }} // Ensures the result image is within the same size limit
+                />
+            </div>
+        );
+    });
+    
     
 
     console.log(boundingBoxInfo)
@@ -49,7 +49,7 @@ const ResultDisplay = ({ resultMessage, imageUrl, boundingBoxInfo}) => {
                 </div>
             )}
 
-            {boundingBoxInfo && cropped}
+             {cropped}
         </div>
     );
 };
