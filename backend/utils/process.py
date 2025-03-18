@@ -75,9 +75,9 @@ def compare_logo_embeddings(input_path, reference_path, model, score_threshold):
                 color = (255, 255, 255)
                 cv2.rectangle(input_img, (x1, y1), (x2, y2), color, 2)
 
-        _, img_encoded = cv2.imencode(".jpg", input_img)
+    _, img_encoded = cv2.imencode(".jpg", input_img)
 
-    return send_file(io.BytesIO(img_encoded.tobytes()), mimetype="image/jpeg")
+    return jsonify({"image": img_to_base64(input_img)})
 
 
 def compute_cosine_similarity(embedding1, embedding2):
@@ -122,6 +122,13 @@ def extract_logo_regions(image, model):
 
     return logo_regions, bounding_boxes, img
 
+def img_to_base64(img):
+    '''Converts an image (ndarray) to a base64-encoded string
+    This is so we can send the image back to the frontend using a json object'''
+
+    _, buffer = cv2.imencode('.jpg', img)
+    img_bytes = buffer.tobytes()
+    return base64.b64encode(img_bytes).decode('utf-8')
 
 def identify_all_logos(file):
     '''Returns the image with bounding boxes around all logos found'''
@@ -155,6 +162,7 @@ def identify_all_logos(file):
             # Calculate percentage coverage of the logo within the image
             coverage_percentage = (box_area / total_image_area) * 100
 
+            # Save all of the bounding box info into this dict. This is sent to frontend
             bounding_boxes_info.append({
                 "x1": x1,
                 "y1": y1,
@@ -163,14 +171,15 @@ def identify_all_logos(file):
                 "box_width": box_width,
                 "box_height": box_height,
                 "box_area": box_area,
-                "box_coverage_percentage": coverage_percentage
+                "box_coverage_percentage": coverage_percentage,
+                "cropped_logo": img_to_base64(img[y1:y2, x1:x2])
             })
 
             cv2.rectangle(img, (x1, y1), (x2, y2), color, thickness)
 
-    _, img_encoded = cv2.imencode(".jpg", img)
+    
     # Make image base64 so it can be jsonifyed.
-    img_base64 = base64.b64encode(img_encoded.tobytes()).decode("utf-8")
+    img_base64 = img_to_base64(img)
 
     return jsonify({
         "bounding_boxes": bounding_boxes_info,

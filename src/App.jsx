@@ -105,7 +105,7 @@ function App() {
           Submit for Detection
         </button>
 
-        <ResultDisplay resultMessage={resultMessage} imageUrl={imageUrl} />
+        <ResultDisplay resultMessage={resultMessage} imageUrl={imageUrl} boundingBoxInfo={boundingBoxInfo}/>
       </div>
     </div>
   );
