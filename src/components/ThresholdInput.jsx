@@ -1,6 +1,6 @@
 import React from "react";
 import ToolTipDropDown from "./ToolTipDropDown";
-
+import ColorPalette from "./ColorPalette";
 const ThresholdInput = ({
     boundingThreshold,
     setBoundingThreshold,
@@ -38,7 +38,7 @@ const ThresholdInput = ({
     return (
         <div className="confidence-threshold mt-6">
 
-            <div className='text-base font-medium mb-1'>
+            <div className='flex items-center gap-2 text-base font-medium mb-1'>
                 {thresholdTitle}{": "}<ToolTipDropDown description={tooltipDescription} />
                 <input
                     className="input w-16 input-primary"
@@ -46,7 +46,9 @@ const ThresholdInput = ({
                     onChange={handleInputChange}
                     value={boundingThreshold}
                 />%
+                <ColorPalette />
             </div>
+            
             <input
                 type="range"
                 min="0"

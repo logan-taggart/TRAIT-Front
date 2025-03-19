@@ -1,7 +1,7 @@
-import React from "react";
-import SearchSpecificLogoOptions from './SearchSpecificLogoOptions';
-import ThresholdInput from "./ThresholdInput";
-import ConfidenceThresholdInput from "./ConfidenceThresholdInput";  
+import React from 'react'
+import SearchSpecificLogoOptions from './SearchSpecificLogoOptions'
+import ThresholdInput from './ThresholdInput'
+import ConfidenceThresholdInput from './ConfidenceThresholdInput'
 const DetectionOptions = ({
     detectionMode,
     setDetectionMode,
@@ -11,38 +11,47 @@ const DetectionOptions = ({
     boundingBoxThreshold,
 }) => {
     const handleDetectionModeChange = (mode) => {
-        setDetectionMode(mode);
-    };
+        setDetectionMode(mode)
+    }
 
     return (
         <div>
             <fieldset className="fieldset w-l bg-base-200 border border-base-200 p-6 rounded-box">
                 <legend className="fieldset-legend">Detection Mode</legend>
-                <div className="detection-mode-toggle">
+                <div>
+                    <div className="flex justify-center detection-mode-toggle">
+                        <button
+                            className={`btn ${
+                                detectionMode === 'all'
+                                    ? 'btn-primary btn-active'
+                                    : 'btn-outline btn-secondary'
+                            } mr-4`}
+                            onClick={() => handleDetectionModeChange('all')}
+                        >
+                            Search All Logos
+                        </button>
 
-
-                    <button
-                        className={`btn ${detectionMode === "all" ? "btn-primary btn-active" : "btn-outline btn-secondary"} mr-4`}
-                        onClick={() => handleDetectionModeChange("all")}
-                    >
-                        Search All Logos
-                    </button>
-
-                    <button
-                        className={`btn ${detectionMode === "specific" ? "btn-primary btn-active" : " btn-outline btn-secondary"}`}
-                        onClick={() => handleDetectionModeChange("specific")}
-                    >
-                        Search Specific Logo
-                    </button>
-
+                        <button
+                            className={`btn ${
+                                detectionMode === 'specific'
+                                    ? 'btn-primary btn-active'
+                                    : ' btn-outline btn-secondary'
+                            }`}
+                            onClick={() =>
+                                handleDetectionModeChange('specific')
+                            }
+                        >
+                            Search Specific Logo
+                        </button>
+                    </div>
                     <ThresholdInput
-                        thresholdTitle={"Bounding Box Threshold"}
+                        thresholdTitle={'Bounding Box Threshold'}
                         boundingThreshold={boundingBoxThreshold}
                         setBoundingThreshold={setBoundingBoxThreshold}
-                        tooltipDescription={"Bounding Box Threshold is the minimum confidence score for a bounding box to be considered, the lower the threshold, the more bounding boxes will be considered."}
+                        tooltipDescription={
+                            'Bounding Box Threshold is the minimum confidence score for a bounding box to be considered, the lower the threshold, the more bounding boxes will be considered.'
+                        }
                     />
-                     
-                 
                 </div>
 
                 <SearchSpecificLogoOptions
@@ -50,10 +59,9 @@ const DetectionOptions = ({
                     confidenceThreshold={confidenceThreshold}
                     setConfidenceThreshold={setConfidenceThreshold}
                 />
-
             </fieldset>
         </div>
-    );
-};
+    )
+}
 
-export default DetectionOptions;
+export default DetectionOptions

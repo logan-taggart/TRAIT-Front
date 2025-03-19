@@ -1,10 +1,9 @@
-import React from 'react';
+import React from 'react'
 
 // This was copied from the DaisyUI documentation
 // https://daisyui.com/components/dropdown/
 
 const ToolTipDropDown = ({ title, description }) => {
-
     // This component is a dropdown tooltip that displays a title and description when clicked
     return (
         <div className="dropdown dropdown-end">
@@ -38,7 +37,7 @@ const ToolTipDropDown = ({ title, description }) => {
                 </div>
             </div>
         </div>
-    );
-};
+    )
+}
 
-export default ToolTipDropDown;
+export default ToolTipDropDown
