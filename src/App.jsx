@@ -16,7 +16,7 @@ function App() {
   const [detectionMode, setDetectionMode] = useState("all");
   const [confidenceThreshold, setConfidenceThreshold] = useState(3);
   const [boundingBoxThreshold, setBoundingBoxThreshold] = useState(50);
-  const [imageUrl, setImageUrl] = useState("");
+  const [imageUrl, setImageUrl] = useState("None");
   const [resultMessage, setResultMessage] = useState("");
   const [boundingBoxInfo, setBoundingBoxInfo] = useState([]);
 
@@ -37,7 +37,7 @@ function App() {
     formData.append("bounding_box_threshold", boundingBoxThreshold);
 
     // Set to null and processing while the image is being processed
-    setImageUrl(null);
+    setImageUrl('None');
     setResultMessage("Processing...");
     setBoundingBoxInfo([]);
     
@@ -110,6 +110,8 @@ function App() {
 
         <ResultDisplay resultMessage={resultMessage} imageUrl={imageUrl} boundingBoxInfo={boundingBoxInfo}/>
       </div>
+
+      
     </div>
   );
 }

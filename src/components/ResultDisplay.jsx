@@ -8,6 +8,12 @@ const ResultDisplay = ({ resultMessage, imageUrl, boundingBoxInfo}) => {
     //     return <span class="loading loading-ring loading-md"></span>;
     // }
 
+    if(!resultMessage) {
+        return null;
+    }
+
+    console.log("ImageUrl: " + imageUrl)
+
     return (
         <div >
             <div className="w-l bg-base-200 border border-base-200 p-6 rounded-box justify-center">
@@ -28,14 +34,14 @@ const ResultDisplay = ({ resultMessage, imageUrl, boundingBoxInfo}) => {
                 )}
 
 
-                {!imageUrl && (
+                {imageUrl === 'None' && (
                                 <div className="flex justify-center items-center h-full w-full">
                                     <span className="loading loading-spinner loading-xl"></span>
                                 </div>
                             )}
 
                 {/* Image with standardized size */}
-                {imageUrl && (
+                {imageUrl !== "None" && (
                     <div className="w-full h-full relative">
                         <img
                             src={imageUrl}
