@@ -35,6 +35,11 @@ function App() {
       formData.append("confidence", confidenceThreshold);
     }
     formData.append("bounding_box_threshold", boundingBoxThreshold);
+
+    // Set to null and processing while the image is being processed
+    setImageUrl(null);
+    setResultMessage("Processing...");
+    setBoundingBoxInfo([]);
     
 
     const endpoint = detectionMode === "all" ? "/image/detect-all" : "/image/detect-specific";
