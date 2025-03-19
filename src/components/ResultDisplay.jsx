@@ -11,8 +11,6 @@ const ResultDisplay = ({ resultMessage, imageUrl, boundingBoxInfo }) => {
         return null
     }
 
-    console.log('ImageUrl: ' + imageUrl)
-
     return (
         <div>
             <div className="w-l bg-base-200 border border-base-200 p-6 rounded-box justify-center">

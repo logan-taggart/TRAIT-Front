@@ -18,7 +18,10 @@ def detect_all():
 
     main_image = request.files["main_image"]
 
-    return identify_all_logos(main_image)
+    bb_color = request.form.get("bb_color")
+
+
+    return identify_all_logos(main_image, bb_color)
 
 
 @image_blueprint.route("/detect-specific", methods=["POST"])
@@ -30,5 +33,7 @@ def detect_specific():
     reference_image = request.files["reference_image"]
     embedding_model = request.form.get("algorithm")
     similarity_threshold = int(request.form.get("confidence"))
+    bb_color = request.form.get("bb_color")
+    print("bounding box color: ", bb_color)
 
-    return compare_logo_embeddings(main_image, reference_image, model, similarity_threshold)
+    return compare_logo_embeddings(main_image, reference_image, model, similarity_threshold, bb_color)

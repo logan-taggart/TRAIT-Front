@@ -19,6 +19,9 @@ function App() {
     const [resultMessage, setResultMessage] = useState('')
     const [boundingBoxInfo, setBoundingBoxInfo] = useState([])
 
+    // Default white
+    const [selectedBBColor, setSelectedBBColor] = useState('#FFFFFF')
+
     const handleSubmit = async () => {
         if (!mainFile || (detectionMode === 'specific' && !referenceFile)) {
             setResultMessage('Please upload the required images.')
@@ -32,6 +35,7 @@ function App() {
             formData.append('confidence', confidenceThreshold)
         }
         formData.append('bounding_box_threshold', boundingBoxThreshold)
+        formData.append('bb_color', selectedBBColor)
 
         // Set to null and processing while the image is being processed
         setImageUrl('None')
@@ -101,6 +105,8 @@ function App() {
                         confidenceThreshold={confidenceThreshold}
                         setBoundingBoxThreshold={setBoundingBoxThreshold}
                         boundingBoxThreshold={boundingBoxThreshold}
+                        setSelectedBBColor={setSelectedBBColor}
+                        selectedBBColor={selectedBBColor}
                     />
                 </div>
 

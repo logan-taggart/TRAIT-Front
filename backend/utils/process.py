@@ -9,13 +9,15 @@ from utils.embed import *
 import base64
 
 
-def compare_logo_embeddings(input_path, reference_path, model, score_threshold):
+def compare_logo_embeddings(input_path, reference_path, model, score_threshold, bb_color):
     embedding_models = [BEiTEmbedding(), CLIPEmbedding(), ResNetEmbedding()]
     thresholds = {
         'BEiTEmbedding': {'cosine': .3, 'euclidean': 110},
         'CLIPEmbedding': {'cosine': .65, 'euclidean': 7.5},
         'ResNetEmbedding': {'cosine': .75, 'euclidean': 50}
     }
+
+    bb_color = hex_to_bgr(bb_color)
 
     input_logos, input_bboxes, input_img = extract_logo_regions(input_path, model)
     reference_logos, _, _ = extract_logo_regions(reference_path, model)
@@ -73,9 +75,9 @@ def compare_logo_embeddings(input_path, reference_path, model, score_threshold):
             if scores[i][j] >= score_threshold: # Check per reference logo
                 x1, y1, x2, y2 = input_bboxes[j]
 
+                print(bb_color)
                 # White bounding box. We can change this later if needed
-                color = (255, 255, 255)
-                cv2.rectangle(input_img, (x1, y1), (x2, y2), color, 2)
+                cv2.rectangle(input_img, (x1, y1), (x2, y2), bb_color, 2)
 
                 box_area = round((x2 - x1) * (y2 - y1), 2)
                 box_height = round(y2 - y1, 2)
@@ -101,7 +103,12 @@ def compare_logo_embeddings(input_path, reference_path, model, score_threshold):
         "image": img_to_base64(input_img)
     })
     
-
+def hex_to_bgr(hex_color):
+    '''Converts a hex color to bgr (blue, green, red)
+    We do it this way because thats how OpenCV reads colors'''
+    hex_color = hex_color.lstrip('#')
+    bgr = tuple(int(hex_color[i:i+2], 16) for i in (4, 2, 0))
+    return bgr
 
 def compute_cosine_similarity(embedding1, embedding2):
     
@@ -153,7 +160,7 @@ def img_to_base64(img):
     img_bytes = buffer.tobytes()
     return base64.b64encode(img_bytes).decode('utf-8')
 
-def identify_all_logos(file):
+def identify_all_logos(file, bb_color):
     '''Returns the image with bounding boxes around all logos found'''
     file_bytes = np.frombuffer(file.read(), np.uint8)
     img = cv2.imdecode(file_bytes, cv2.IMREAD_COLOR)
@@ -161,7 +168,7 @@ def identify_all_logos(file):
     results = model(img)
 
     confidence_threshold = 0.25
-    color = (255, 255, 255)
+    bb_color = hex_to_bgr(bb_color)
     thickness = 2
 
     # Get the image width and height
@@ -198,7 +205,7 @@ def identify_all_logos(file):
                 "cropped_logo": img_to_base64(img[y1:y2, x1:x2])
             })
 
-            cv2.rectangle(img, (x1, y1), (x2, y2), color, thickness)
+            cv2.rectangle(img, (x1, y1), (x2, y2), bb_color, thickness)
 
     
     # Make image base64 so it can be jsonifyed.

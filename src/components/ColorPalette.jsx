@@ -1,9 +1,6 @@
 import { useState } from 'react'
 
-export default function ColorPalette() {
-    // Default white
-    const [selectedColor, setSelectedColor] = useState('#ffffff')
-
+export default function ColorPalette({ selectedBBColor, setSelectedBBColor }) {
     // Color selector
     return (
         <div
@@ -13,8 +10,8 @@ export default function ColorPalette() {
             {/* Tooltip for the color selector */}
             <input
                 type="color"
-                value={selectedColor}
-                onChange={(e) => setSelectedColor(e.target.value)}
+                value={selectedBBColor}
+                onChange={(e) => setSelectedBBColor(e.target.value)}
                 className="input w-10 h-10 p-0 cursor-pointer"
             />
         </div>

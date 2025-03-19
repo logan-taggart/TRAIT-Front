@@ -2,6 +2,7 @@ import React from 'react'
 import SearchSpecificLogoOptions from './SearchSpecificLogoOptions'
 import ThresholdInput from './ThresholdInput'
 import ConfidenceThresholdInput from './ConfidenceThresholdInput'
+
 const DetectionOptions = ({
     detectionMode,
     setDetectionMode,
@@ -9,6 +10,8 @@ const DetectionOptions = ({
     setConfidenceThreshold,
     setBoundingBoxThreshold,
     boundingBoxThreshold,
+    selectedBBColor,
+    setSelectedBBColor,
 }) => {
     const handleDetectionModeChange = (mode) => {
         setDetectionMode(mode)
@@ -51,6 +54,8 @@ const DetectionOptions = ({
                         tooltipDescription={
                             'Bounding Box Threshold is the minimum confidence score for a bounding box to be considered, the lower the threshold, the more bounding boxes will be considered.'
                         }
+                        selectedBBColor={selectedBBColor}
+                        setSelectedBBColor={setSelectedBBColor}
                     />
                 </div>
 
