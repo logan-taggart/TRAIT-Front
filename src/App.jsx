@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import UploadSection from './components/UploadSection';
 import DetectionOptions from './components/DetectionOptions';
 import ResultDisplay from './components/ResultDisplay';
+import ImageUploadSection from './components/ImageUploadSection';
+import Header from './components/Header';
 import './App.css';
 
 function App() {
@@ -73,29 +75,17 @@ function App() {
 
     return (
         <div className="">
-            <header className="main-header">
-                <h1 className="text-2xl font-bold">TRAIT</h1>
-                <p className="text-lg">
-                    Trademark Analysis & Identification Tool
-                </p>
-            </header>
+            <Header />
 
-            <div className="App-header flex flex-col items-center justify-center text-white text-2xl">
-                <div className="mb-2 flex gap-4">
-                    <UploadSection
-                        label="Upload Main Image"
-                        file={mainFile}
-                        setFile={setMainFile}
-                    />
-
-                    {detectionMode === 'specific' && (
-                        <UploadSection
-                            label="Upload Reference Logo"
-                            file={referenceFile}
-                            setFile={setReferenceFile}
-                        />
-                    )}
-                </div>
+            <div className=" flex flex-col items-center justify-center text-white text-2xl">
+                {/* Main and reference image upload */}
+                <ImageUploadSection
+                    mainFile={mainFile}
+                    setMainFile={setMainFile}
+                    referenceFile={referenceFile}
+                    setReferenceFile={setReferenceFile}
+                    detectionMode={detectionMode}
+                />
 
                 <div className="">
                     <DetectionOptions

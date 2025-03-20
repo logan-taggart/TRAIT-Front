@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 // This was copied from the DaisyUI documentation
 // https://daisyui.com/components/dropdown/
@@ -20,9 +20,9 @@ const ToolTipDropDown = ({ title, description }) => {
                     className="h-4 w-4 stroke-current"
                 >
                     <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
                         d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                     ></path>
                 </svg>
@@ -37,7 +37,7 @@ const ToolTipDropDown = ({ title, description }) => {
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default ToolTipDropDown
+export default ToolTipDropDown;
