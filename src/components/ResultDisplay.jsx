@@ -1,5 +1,5 @@
-import React from 'react'
-import ResultDetails from './ResultDetails'
+import React from 'react';
+import ResultDetails from './ResultDetails';
 
 const ResultDisplay = ({ resultMessage, imageUrl, boundingBoxInfo }) => {
     // if (resultMessage === "Processing..." && !imageUrl) {
@@ -8,7 +8,7 @@ const ResultDisplay = ({ resultMessage, imageUrl, boundingBoxInfo }) => {
     // }
 
     if (!resultMessage) {
-        return null
+        return null;
     }
 
     return (
@@ -30,7 +30,8 @@ const ResultDisplay = ({ resultMessage, imageUrl, boundingBoxInfo }) => {
                     </div>
                 )}
 
-                {imageUrl === 'None' && (
+                {/* Loading Spinner */}
+                {imageUrl === 'None' && resultMessage == 'Processing...' && (
                     <div className="flex justify-center items-center h-full w-full">
                         <span className="loading loading-spinner loading-xl"></span>
                     </div>
@@ -51,7 +52,7 @@ const ResultDisplay = ({ resultMessage, imageUrl, boundingBoxInfo }) => {
             <br />
             <ResultDetails boundingBoxInfo={boundingBoxInfo} />
         </div>
-    )
-}
+    );
+};
 
-export default ResultDisplay
+export default ResultDisplay;

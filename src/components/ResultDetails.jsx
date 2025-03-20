@@ -1,13 +1,19 @@
-import React from 'react'
+import React from 'react';
 
 const ResultDetails = ({ boundingBoxInfo }) => {
     if (boundingBoxInfo.length === 0) {
-        return null
+        return null;
     }
 
-    const confidenceScores = { 2: 'Low', 3: 'Medium', 4: 'High' }
+    const confidenceScores = { 2: 'Low', 3: 'Medium', 4: 'High' };
+    const getConfidenceScore = (confidence) => {
+        if (confidence >= 4) {
+            return 'High';
+        }
+        return confidenceScores[confidence];
+    };
 
-    console.log(boundingBoxInfo)
+    console.log(boundingBoxInfo);
     // Show all of the logos with bounding boxes cropped
     return (
         <div className="w-l bg-base-200 border border-base-200 p-6 rounded-box justify-center mb-4">
@@ -31,14 +37,14 @@ const ResultDetails = ({ boundingBoxInfo }) => {
                         {box.confidence && ( // If the confidence score is available, display it (only for specific logo detection)
                             <div className="text-base">
                                 Confidence of:{' '}
-                                {confidenceScores[box.confidence]}
+                                {getConfidenceScore(box.confidence)}
                             </div>
                         )}
                     </div>
                 ),
             )}
         </div>
-    )
-}
+    );
+};
 
-export default ResultDetails
+export default ResultDetails;
