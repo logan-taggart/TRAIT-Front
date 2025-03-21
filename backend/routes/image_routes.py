@@ -17,9 +17,7 @@ def detect_all():
         return jsonify({"error": "No file provided"}), 400
 
     main_image = request.files["main_image"]
-
     bb_color = request.form.get("bb_color")
-
 
     return identify_all_logos(main_image, bb_color)
 
@@ -34,6 +32,5 @@ def detect_specific():
     embedding_model = request.form.get("algorithm")
     similarity_threshold = int(request.form.get("confidence"))
     bb_color = request.form.get("bb_color")
-    print("bounding box color: ", bb_color)
 
     return compare_logo_embeddings(main_image, reference_image, model, similarity_threshold, bb_color)

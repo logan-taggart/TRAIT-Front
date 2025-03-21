@@ -1,5 +1,5 @@
 import cv2
-from flask import send_file, jsonify
+from flask import jsonify
 import io
 from models.model_load import model
 import numpy as np
