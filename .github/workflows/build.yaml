@@ -9,11 +9,9 @@ jobs:
       matrix:
         os: [macos-13, windows-latest]
     runs-on: ${{ matrix.os }}
-    outputs:
-      artifact-folder: release-artifacts
 
     steps:
-      - name: Checkout Electron frontend
+      - name: Checkout code
         uses: actions/checkout@v3
 
       - name: Set up Node.js
@@ -48,7 +46,7 @@ jobs:
 
       - name: Build Electron app
         env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm run build-all
 
       - name: Create release artifacts folder
@@ -61,38 +59,39 @@ jobs:
       - name: Zip Electron build (Windows)
         if: matrix.os == 'windows-latest'
         shell: pwsh
-        run: Compress-Archive -Path dist\* -DestinationPath release-artifacts\TRAIT-Windows.zip
+        run: Compress-Archive -Path dist\* -DestinationPath release-artifacts/TRAIT-Windows.zip
 
-      - name: Upload release artifact folder
+      - name: Upload release artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.os }}-release-zips
-          path: release-artifacts
+          name: release-zips-${{ matrix.os }}
+          path: release-artifacts/
 
   release:
     name: Create GitHub Release
-    runs-on: ubuntu-latest
     needs: build-electron
+    runs-on: ubuntu-latest
 
     steps:
-      - name: Download macOS build zip
+      - name: Download macOS zipped build
         uses: actions/download-artifact@v4
         with:
-          name: macos-13-release-zips
+          name: release-zips-macos-13
           path: release-artifacts
 
-      - name: Download Windows build zip
+      - name: Download Windows zipped build
         uses: actions/download-artifact@v4
         with:
-          name: windows-latest-release-zips
+          name: release-zips-windows-latest
           path: release-artifacts
 
-      - name: Publish GitHub Release
-        uses: softprops/action-gh-release@v2
-        with:
-          name: Release ${{ github.run_id }}
-          tag_name: release-${{ github.run_id }}
-          body: "Automated release for commit `${{ github.sha }}`"
-          files: release-artifacts/**/*.zip
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      - name: Authenticate with gh CLI
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+
+      - name: Create GitHub Release
+        run: |
+          gh release create "release-${{ github.run_id }}" \
+            release-artifacts/TRAIT-MacIntel.zip \
+            release-artifacts/TRAIT-Windows.zip \
+            --title "TRAIT Release ${{ github.run_id }}" \
+            --notes "Automated release for commit `${{ github.sha }}`"
