@@ -52,15 +52,35 @@ jobs:
       - name: Upload Electron build
         uses: actions/upload-artifact@v4
         with:
-          name: Electron-${{ matrix.os }}
-          path: dist
+          name: TRAIT-${{ matrix.os }}
+          path: dist/*.zip
 
-      - name: Upload ZIP to GitHub Release
+  release:
+    name: Create GitHub Release
+    needs: build-electron
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download macOS artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: TRAIT-macos-13
+          path: artifacts/mac
+
+      - name: Download Windows artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: TRAIT-windows-latest
+          path: artifacts/win
+
+      - name: Upload to GitHub Release
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
           files: |
-            dist/*.zip
+            artifacts/mac/*.zip
+            artifacts/win/*.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
