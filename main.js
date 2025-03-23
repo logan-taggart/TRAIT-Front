@@ -2,6 +2,7 @@ import { app, BrowserWindow } from 'electron';
 import { spawn } from 'child_process';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import url from 'url';
 
 // Manually define __dirname
 const __filename = fileURLToPath(import.meta.url);
@@ -10,15 +11,29 @@ const __dirname = path.dirname(__filename);
 let mainWindow;
 let backendProcess;
 
-app.on('ready', () => {
-    console.log('Starting Flask backend...');
+const isDev = !app.isPackaged;
+const platform = process.platform;
 
-    backendProcess = spawn('python', ['run.py'], {
-        cwd: path.join(__dirname, 'backend'),
+app.on('ready', () => {
+    console.log('Starting backend...');
+
+    const exeName = platform === 'win32' ? 'backend.exe' : 'backend';
+    const exePath = isDev
+        ? path.join(__dirname, 'backend', exeName)
+        : path.join(process.resourcesPath, 'backend', exeName);
+
+    // Launch the backend
+    backendProcess = spawn(exePath, {
         shell: true,
         detached: false,
         stdio: 'inherit',
+        windowsHide: true,
+        env: {
+            ...process.env,
+            ENV: isDev ? 'dev' : 'prod',
+        },
     });
+
 
     console.log('Launching Electron window...');
 
@@ -30,7 +45,16 @@ app.on('ready', () => {
         },
     });
 
-    mainWindow.loadURL('http://localhost:5173');
+    const indexPath = isDev
+        ? 'http://localhost:5173'
+        : url.format({
+            pathname: path.join(__dirname, 'dist', 'index.html'),
+            protocol: 'file:',
+            slashes: true,
+        });
+
+    mainWindow.loadURL(indexPath);
+    mainWindow.webContents.openDevTools();
 
     mainWindow.on('closed', () => {
         console.log('Electron window closed');

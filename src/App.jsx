@@ -7,10 +7,7 @@ import Header from './components/Header';
 import './App.css';
 
 function App() {
-    const baseURL =
-        window.location.hostname === 'localhost'
-            ? 'http://127.0.0.1:5174'
-            : 'https://trademark-identification-back.onrender.com';
+    const baseURL = 'http://127.0.0.1:5174';
 
     const [mainFile, setMainFile] = useState(null);
     const [referenceFile, setReferenceFile] = useState(null);
