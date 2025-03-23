@@ -40,13 +40,15 @@
         "productName": "TRAIT",
         "files": [
             "dist/**/*",
-            "main.js",
-            "backend/**/*"
+            "main.js"
         ],
         "extraResources": [
             {
                 "from": "backend/",
-                "to": "backend/"
+                "to": "backend/",
+                "filter": [
+                    "**/*"
+                ]
             }
         ],
         "mac": {
