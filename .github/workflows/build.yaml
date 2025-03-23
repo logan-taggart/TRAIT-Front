@@ -22,7 +22,7 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Download and prepare backend (macOS)
+      - name: Download backend (macOS)
         if: matrix.os == 'macos-13'
         shell: bash
         run: |
@@ -33,7 +33,8 @@ jobs:
           cp -r temp-backend/backend backend
           chmod +x backend/backend
           rm -rf backend.zip temp-backend
-      - name: Download and prepare backend (Windows)
+
+      - name: Download backend (Windows)
         if: matrix.os == 'windows-latest'
         shell: pwsh
         run: |
@@ -44,16 +45,28 @@ jobs:
           Copy-Item -Path "temp-backend/backend" -Destination "backend" -Recurse -Force
           Remove-Item backend.zip
           Remove-Item -Recurse -Force temp-backend
+
       - name: Build Electron app
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: npm run build-all
 
-      - name: Upload Electron build
+      - name: Zip build output (macOS)
+        if: matrix.os == 'macos-13'
+        run: zip -r TRAIT-macintel.zip dist
+
+      - name: Zip build output (Windows)
+        if: matrix.os == 'windows-latest'
+        shell: pwsh
+        run: |
+          Compress-Archive -Path dist\* -DestinationPath TRAIT-windows.zip
+
+      - name: Upload zipped build
         uses: actions/upload-artifact@v4
         with:
           name: TRAIT-${{ matrix.os }}
-          path: dist
+          path: |
+            TRAIT-*.zip
 
   release:
     name: Create GitHub Release
@@ -79,7 +92,7 @@ jobs:
           tag_name: ${{ github.run_id }}
           name: Release ${{ github.run_id }}
           files: |
-            artifacts/mac/*
-            artifacts/win/*
+            artifacts/mac/*.zip
+            artifacts/win/*.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
