@@ -1,0 +1,54 @@
+name: Build and Package Electron App
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-electron:
+    strategy:
+      matrix:
+        os: [macos-13, windows-latest]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout Electron frontend
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Download and prepare backend
+        shell: bash
+        run: |
+          if [[ "${{ matrix.os }}" == "windows-latest" ]]; then
+            BACKEND_NAME="backend-windows.zip"
+          else
+            BACKEND_NAME="backend-macintel.zip"
+          fi
+
+          mkdir temp-backend
+          curl -L -o backend.zip https://github.com/logan-taggart/TRAIT-Back/releases/latest/download/$BACKEND_NAME
+          unzip backend.zip -d temp-backend
+
+          rm -rf backend
+          cp -r temp-backend/backend backend
+
+          if [[ "${{ matrix.os }}" != "windows-latest" ]]; then
+            chmod +x backend/backend
+          fi
+
+          rm -rf backend.zip temp-backend
+
+      - name: Build Electron app
+        run: npm run build-all
+
+      - name: Upload Electron build
+        uses: actions/upload-artifact@v4
+        with:
+          name: Electron-${{ matrix.os }}
+          path: dist
