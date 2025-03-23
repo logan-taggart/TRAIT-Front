@@ -95,4 +95,4 @@ jobs:
           body: "Automated release for commit `${{ github.sha }}`"
           files: release-artifacts/**/*.zip
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
