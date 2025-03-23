@@ -45,10 +45,7 @@
         "extraResources": [
             {
                 "from": "backend/",
-                "to": "backend/",
-                "filter": [
-                    "**/*"
-                ]
+                "to": "backend/"
             }
         ],
         "mac": {
