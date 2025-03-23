@@ -50,14 +50,7 @@
             }
         ],
         "mac": {
-            "target": {
-                "target": "dmg",
-                "arch": [
-                    "x64"
-                ]
-            },
-            "hardenedRuntime": true,
-            "gatekeeperAssess": false
+            "target": "dmg"
         },
         "win": {
             "target": "nsis"
