@@ -53,7 +53,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: TRAIT-${{ matrix.os }}
-          path: dist
+          path: dist/TRAIT-${{ matrix.os }}.zip
 
   release:
     name: Create GitHub Release
@@ -79,7 +79,7 @@ jobs:
           tag_name: ${{ github.run_id }}
           name: Release ${{ github.run_id }}
           files: |
-            artifacts/mac/**
-            artifacts/win/**
+            artifacts/mac/*.zip
+            artifacts/win/*.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
