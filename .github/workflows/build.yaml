@@ -1,4 +1,4 @@
-name: Build and Package Electron App
+name: Build and Release Electron App
 
 on:
   workflow_dispatch:
@@ -9,6 +9,8 @@ jobs:
       matrix:
         os: [macos-13, windows-latest]
     runs-on: ${{ matrix.os }}
+    outputs:
+      artifact-folder: release-artifacts
 
     steps:
       - name: Checkout Electron frontend
@@ -46,11 +48,51 @@ jobs:
 
       - name: Build Electron app
         env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }} 
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: npm run build-all
 
-      - name: Upload Electron build (artifact)
+      - name: Create release artifacts folder
+        run: mkdir -p release-artifacts
+
+      - name: Zip Electron build (macOS)
+        if: matrix.os == 'macos-13'
+        run: zip -r release-artifacts/TRAIT-MacIntel.zip dist
+
+      - name: Zip Electron build (Windows)
+        if: matrix.os == 'windows-latest'
+        shell: pwsh
+        run: Compress-Archive -Path dist\* -DestinationPath release-artifacts\TRAIT-Windows.zip
+
+      - name: Upload release artifact folder
         uses: actions/upload-artifact@v4
         with:
-          name: Electron-${{ matrix.os }}
-          path: dist
+          name: ${{ matrix.os }}-release-zips
+          path: release-artifacts
+
+  release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    needs: build-electron
+
+    steps:
+      - name: Download macOS build zip
+        uses: actions/download-artifact@v4
+        with:
+          name: macos-13-release-zips
+          path: release-artifacts
+
+      - name: Download Windows build zip
+        uses: actions/download-artifact@v4
+        with:
+          name: windows-latest-release-zips
+          path: release-artifacts
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Release ${{ github.run_id }}
+          tag_name: release-${{ github.run_id }}
+          body: "Automated release for commit `${{ github.sha }}`"
+          files: release-artifacts/**/*.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

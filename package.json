@@ -40,7 +40,8 @@
         "productName": "TRAIT",
         "files": [
             "dist/**/*",
-            "main.js"
+            "main.js",
+            "backend/**/*"
         ],
         "extraResources": [
             {

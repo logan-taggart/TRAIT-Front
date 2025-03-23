@@ -4,7 +4,6 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import url from 'url';
 
-// Manually define __dirname
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -22,7 +21,6 @@ app.on('ready', () => {
         ? path.join(__dirname, 'backend', exeName)
         : path.join(process.resourcesPath, 'backend', exeName);
 
-    // Launch the backend
     backendProcess = spawn(exePath, {
         shell: true,
         detached: false,
@@ -54,7 +52,6 @@ app.on('ready', () => {
         });
 
     mainWindow.loadURL(indexPath);
-    mainWindow.webContents.openDevTools();
 
     mainWindow.on('closed', () => {
         console.log('Electron window closed');
