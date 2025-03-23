@@ -22,27 +22,29 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Download and prepare backend
+      - name: Download and prepare backend (macOS)
+        if: matrix.os == 'macos-13'
         shell: bash
         run: |
-          if [[ "${{ matrix.os }}" == "windows-latest" ]]; then
-            BACKEND_NAME="backend-windows.zip"
-          else
-            BACKEND_NAME="backend-macintel.zip"
-          fi
-
-          mkdir temp-backend
-          curl -L -o backend.zip https://github.com/logan-taggart/TRAIT-Back/releases/latest/download/$BACKEND_NAME
+          echo "OS: macOS"
+          curl -L -o backend.zip https://github.com/logan-taggart/TRAIT-Back/releases/latest/download/backend-macintel.zip
           unzip backend.zip -d temp-backend
-
           rm -rf backend
           cp -r temp-backend/backend backend
-
-          if [[ "${{ matrix.os }}" != "windows-latest" ]]; then
-            chmod +x backend/backend
-          fi
-
+          chmod +x backend/backend
           rm -rf backend.zip temp-backend
+
+      - name: Download and prepare backend (Windows)
+        if: matrix.os == 'windows-latest'
+        shell: pwsh
+        run: |
+          Write-Output "OS: Windows"
+          Invoke-WebRequest -Uri "https://github.com/logan-taggart/TRAIT-Back/releases/latest/download/backend-windows.zip" -OutFile "backend.zip"
+          Expand-Archive -Path "backend.zip" -DestinationPath "temp-backend" -Force
+          Remove-Item -Recurse -Force backend -ErrorAction SilentlyContinue
+          Copy-Item -Path "temp-backend/backend" -Destination "backend" -Recurse -Force
+          Remove-Item backend.zip
+          Remove-Item -Recurse -Force temp-backend
 
       - name: Build Electron app
         run: npm run build-all
