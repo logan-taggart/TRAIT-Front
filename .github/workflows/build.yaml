@@ -76,10 +76,10 @@ jobs:
       - name: Upload to GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ github.ref_name }}
-          name: Release ${{ github.ref_name }}
+          tag_name: ${{ github.run_id }}
+          name: Release ${{ github.run_id }}
           files: |
-            artifacts/mac/*.zip
-            artifacts/win/*.zip
+            artifacts/mac/
+            artifacts/win/
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
