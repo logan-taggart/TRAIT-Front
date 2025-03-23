@@ -53,7 +53,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: TRAIT-${{ matrix.os }}
-          path: dist/TRAIT-${{ matrix.os }}.zip
+          path: dist
 
   release:
     name: Create GitHub Release
