@@ -45,6 +45,8 @@ jobs:
           Remove-Item backend.zip
           Remove-Item -Recurse -Force temp-backend
       - name: Build Electron app
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: npm run build-all
 
       - name: Upload Electron build
