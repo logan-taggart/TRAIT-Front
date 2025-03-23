@@ -1,0 +1,40 @@
+name: Release Electron Artifacts
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download macOS artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: Electron-macos-13
+          path: artifacts/mac
+
+      - name: Download Windows artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: Electron-windows-latest
+          path: artifacts/win
+
+      - name: Rename zip files
+        run: |
+          mv artifacts/mac/*.zip artifacts/TRAIT-mac.zip
+          mv artifacts/win/*.zip artifacts/TRAIT-win.zip
+
+      - name: Upload renamed ZIPs to GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: Release ${{ github.ref_name }}
+          tag_name: ${{ github.ref_name }}
+          files: |
+            artifacts/TRAIT-mac.zip
+            artifacts/TRAIT-win.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
