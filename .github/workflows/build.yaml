@@ -1,4 +1,4 @@
-name: Build and Release Electron App
+name: Build and Package Electron App
 
 on:
   workflow_dispatch:
@@ -11,7 +11,7 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-      - name: Checkout code
+      - name: Checkout Electron frontend
         uses: actions/checkout@v3
 
       - name: Set up Node.js
@@ -32,7 +32,6 @@ jobs:
           cp -r temp-backend/backend backend
           chmod +x backend/backend
           rm -rf backend.zip temp-backend
-
       - name: Download and prepare backend (Windows)
         if: matrix.os == 'windows-latest'
         shell: pwsh
@@ -43,58 +42,13 @@ jobs:
           Copy-Item -Path "temp-backend/backend" -Destination "backend" -Recurse -Force
           Remove-Item backend.zip
           Remove-Item -Recurse -Force temp-backend
-
       - name: Build Electron app
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }} 
         run: npm run build-all
 
-      - name: Create release artifacts folder
-        run: mkdir -p release-artifacts
-
-      - name: Zip Electron build (macOS)
-        if: matrix.os == 'macos-13'
-        run: zip -r release-artifacts/TRAIT-MacIntel.zip dist
-
-      - name: Zip Electron build (Windows)
-        if: matrix.os == 'windows-latest'
-        shell: pwsh
-        run: Compress-Archive -Path dist\* -DestinationPath release-artifacts/TRAIT-Windows.zip
-
-      - name: Upload release artifacts
+      - name: Upload Electron build (artifact)
         uses: actions/upload-artifact@v4
         with:
-          name: release-zips-${{ matrix.os }}
-          path: release-artifacts/
-
-  release:
-    name: Create GitHub Release
-    needs: build-electron
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Download macOS zipped build
-        uses: actions/download-artifact@v4
-        with:
-          name: release-zips-macos-13
-          path: release-artifacts
-
-      - name: Download Windows zipped build
-        uses: actions/download-artifact@v4
-        with:
-          name: release-zips-windows-latest
-          path: release-artifacts
-
-      - name: Authenticate with gh CLI
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
-
-      - name: Create GitHub Release
-        run: |
-          gh release create "release-${{ github.run_id }}" \
-            release-artifacts/TRAIT-MacIntel.zip \
-            release-artifacts/TRAIT-Windows.zip \
-            --title "TRAIT Release ${{ github.run_id }}" \
-            --notes "Automated release for commit `${{ github.sha }}`"
+          name: Electron-${{ matrix.os }}
+          path: dist
