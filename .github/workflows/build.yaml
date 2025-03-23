@@ -26,33 +26,36 @@ jobs:
         if: matrix.os == 'macos-13'
         shell: bash
         run: |
-          echo "OS: macOS"
           curl -L -o backend.zip https://github.com/logan-taggart/TRAIT-Back/releases/latest/download/backend-macintel.zip
           unzip backend.zip -d temp-backend
           rm -rf backend
           cp -r temp-backend/backend backend
           chmod +x backend/backend
           rm -rf backend.zip temp-backend
+
       - name: Download and prepare backend (Windows)
         if: matrix.os == 'windows-latest'
         shell: pwsh
         run: |
-          Write-Output "OS: Windows"
           Invoke-WebRequest -Uri "https://github.com/logan-taggart/TRAIT-Back/releases/latest/download/backend-windows.zip" -OutFile "backend.zip"
           Expand-Archive -Path "backend.zip" -DestinationPath "temp-backend" -Force
           Remove-Item -Recurse -Force backend -ErrorAction SilentlyContinue
           Copy-Item -Path "temp-backend/backend" -Destination "backend" -Recurse -Force
           Remove-Item backend.zip
           Remove-Item -Recurse -Force temp-backend
+
       - name: Build Electron app
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: npm run build-all
 
+      - name: Rename output zip
+        run: mv dist/*.zip dist/TRAIT-${{ matrix.os }}.zip
+
       - name: Upload Electron build
         uses: actions/upload-artifact@v4
         with:
-          name: TRAIT-${{ matrix.os }}
+          name: ${{ matrix.os == 'macos-13' && 'TRAIT-mac' || 'TRAIT-win' }}
           path: dist/TRAIT-${{ matrix.os }}.zip
 
   release:
@@ -64,19 +67,24 @@ jobs:
       - name: Download macOS artifact
         uses: actions/download-artifact@v4
         with:
-          name: TRAIT-macos-13
+          name: TRAIT-mac
           path: artifacts/mac
 
       - name: Download Windows artifact
         uses: actions/download-artifact@v4
         with:
-          name: TRAIT-windows-latest
+          name: TRAIT-win
           path: artifacts/win
+
+      - name: Show files (debug)
+        run: |
+          ls -lh artifacts/mac
+          ls -lh artifacts/win
 
       - name: Upload to GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ github.run_id }}
+          tag_name: release-${{ github.run_id }}
           name: Release ${{ github.run_id }}
           files: |
             artifacts/mac/*.zip
