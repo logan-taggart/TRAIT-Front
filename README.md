@@ -1,4 +1,5 @@
-To run frontend: npm run frontend
+To run frontend: npm run frontend  
+Runs on port 5173
 
 Full Packaged Application:  
 - [Download for macOS (Intel)](https://github.com/logan-taggart/TRAIT-Front/releases/latest/download/TRAIT-macintel.zip)  
