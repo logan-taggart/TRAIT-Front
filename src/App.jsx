@@ -17,6 +17,7 @@ function App() {
     const [imageUrl, setImageUrl] = useState('None');
     const [resultMessage, setResultMessage] = useState('');
     const [boundingBoxInfo, setBoundingBoxInfo] = useState([]);
+    const [processingMode, setProcessingMode] = useState('Image');
 
     // Default white
     const [selectedBBColor, setSelectedBBColor] = useState('#FFFFFF');
@@ -70,48 +71,68 @@ function App() {
         }
     };
 
-    return (
-        <div className="">
-            <Header />
-
-            <div className=" flex flex-col items-center justify-center text-white text-2xl">
-                {/* Main and reference image upload */}
-                <ImageUploadSection
-                    mainFile={mainFile}
-                    setMainFile={setMainFile}
-                    referenceFile={referenceFile}
-                    setReferenceFile={setReferenceFile}
-                    detectionMode={detectionMode}
+    // Render what we need for the image processing
+    if (processingMode === 'Image') {
+        // We can probably make this its own component eventually...
+        return (
+            <div className="">
+                <Header
+                    setProcessingMode={setProcessingMode}
+                    processingMode={processingMode}
                 />
 
-                <div className="">
-                    <DetectionOptions
+                <div className=" flex flex-col items-center justify-center text-white text-2xl">
+                    {/* Main and reference image upload */}
+                    <ImageUploadSection
+                        mainFile={mainFile}
+                        setMainFile={setMainFile}
+                        referenceFile={referenceFile}
+                        setReferenceFile={setReferenceFile}
                         detectionMode={detectionMode}
-                        setDetectionMode={setDetectionMode}
-                        setConfidenceThreshold={setConfidenceThreshold}
-                        confidenceThreshold={confidenceThreshold}
-                        setBoundingBoxThreshold={setBoundingBoxThreshold}
-                        boundingBoxThreshold={boundingBoxThreshold}
-                        setSelectedBBColor={setSelectedBBColor}
-                        selectedBBColor={selectedBBColor}
+                    />
+
+                    <div className="">
+                        <DetectionOptions
+                            detectionMode={detectionMode}
+                            setDetectionMode={setDetectionMode}
+                            setConfidenceThreshold={setConfidenceThreshold}
+                            confidenceThreshold={confidenceThreshold}
+                            setBoundingBoxThreshold={setBoundingBoxThreshold}
+                            boundingBoxThreshold={boundingBoxThreshold}
+                            setSelectedBBColor={setSelectedBBColor}
+                            selectedBBColor={selectedBBColor}
+                        />
+                    </div>
+
+                    <button
+                        className="mt-4 mb-4 btn btn-success btn-xl"
+                        onClick={handleSubmit}
+                    >
+                        Submit for Detection
+                    </button>
+
+                    <ResultDisplay
+                        resultMessage={resultMessage}
+                        imageUrl={imageUrl}
+                        boundingBoxInfo={boundingBoxInfo}
                     />
                 </div>
+            </div>
+        );
+    }
 
-                <button
-                    className="mt-4 mb-4 btn btn-success btn-xl"
-                    onClick={handleSubmit}
-                >
-                    Submit for Detection
-                </button>
-
-                <ResultDisplay
-                    resultMessage={resultMessage}
-                    imageUrl={imageUrl}
-                    boundingBoxInfo={boundingBoxInfo}
+    // Render what we need for the video processing
+    else {
+        // Video format
+        return (
+            <div>
+                <Header
+                    setProcessingMode={setProcessingMode}
+                    processingMode={processingMode}
                 />
             </div>
-        </div>
-    );
+        );
+    }
 }
 
 export default App;
