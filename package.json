@@ -11,7 +11,7 @@
         "preview": "vite preview",
         "start": "concurrently \"npm run frontend\" \"npm run wait-electron\"",
         "frontend": "vite",
-        "electron": "electron .",
+        "electron": "electron main.js",
         "wait-electron": "wait-on http://localhost:5173 && npm run electron",
         "build-all": "npm run build && electron-builder"
     },
