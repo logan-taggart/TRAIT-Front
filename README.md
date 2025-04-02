@@ -1,4 +1,7 @@
-To run frontend: npm run frontend  
+To run:
+- npm install
+- npm run start 
+
 Runs on port 5173
 
 Full Packaged Application:  
@@ -6,3 +9,5 @@ Full Packaged Application:
 - [Download for Windows](https://github.com/logan-taggart/TRAIT-Front/releases/latest/download/TRAIT-windows.zip)
 
 For Mac to remove security issues from package: xattr -rd com.apple.quarantine FOLDER_NAME  
+
+[Link To Backend Repository](https://github.com/logan-taggart/TRAIT-Back)
