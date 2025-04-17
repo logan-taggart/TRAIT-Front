@@ -12,13 +12,17 @@ const UploadSection = ({ label, file, setFile }) => {
         const selectedFile = event.target.files[0];
         if (selectedFile) {
             setFile(selectedFile);
-
-            // Create a preview for the image
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setImagePreview(reader.result); // Set the image preview URL
-            };
-            reader.readAsDataURL(selectedFile);
+    
+            // Only generate preview if it's an image
+            if (selectedFile.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    setImagePreview(reader.result);
+                };
+                reader.readAsDataURL(selectedFile);
+            } else {
+                setImagePreview(null); // No preview for non-image files
+            }
         }
     };
 
@@ -26,15 +30,20 @@ const UploadSection = ({ label, file, setFile }) => {
     // Makes the reference image preview appear when you change from "Search all" back to "Search specific"
     useEffect(() => {
         if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setImagePreview(reader.result);
-            };
-            reader.readAsDataURL(file);
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    setImagePreview(reader.result);
+                };
+                reader.readAsDataURL(file);
+            } else {
+                setImagePreview(null); // No preview if not image
+            }
         } else {
             setImagePreview(null);
         }
-    }, [file]); // whenever file changes
+    }, [file]);
+    
 
     const handleClick = () => {
         // Trigger the file input click using the ref
