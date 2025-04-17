@@ -21,7 +21,7 @@ function App() {
     const [resultMessage, setResultMessage] = useState('');
     const [boundingBoxInfo, setBoundingBoxInfo] = useState([]);
     const [processingMode, setProcessingMode] = useState('Image');
-    const [videoURL, setVideoURL] = useState('None');
+    const [videoData, setVideoData] = useState('None');
 
     // Default white
     const [selectedBBColor, setSelectedBBColor] = useState('#FFFFFF');
@@ -97,7 +97,7 @@ function App() {
                     setResultMessage('Processing completed successfully!');
                 } else {
                     // Video processing
-                    setVideoURL(`data:video/mp4;base64,${data.video}`);
+                    setVideoData(data);
                     setResultMessage('Processing completed successfully!');
                 }
             } else {
@@ -149,7 +149,7 @@ function App() {
 
                     <VideoResultDisplay
                         resultMessage={resultMessage}
-                        videoURL={videoURL}
+                        videoData={videoData}
                         boundingBoxInfo={boundingBoxInfo}
                     />
                 </div>

@@ -1,7 +1,7 @@
 import React from 'react';
-import ResultDetails from './ResultDetails';
+import VideoResultDetails from './VideoResultDetails';
 
-const VideoResultDisplay = ({ resultMessage, videoURL, boundingBoxInfo }) => {
+const VideoResultDisplay = ({ resultMessage, videoData }) => {
     // if (resultMessage === "Processing..." && !videoURL) {
     //     console.log("Haiiii")
     //     return <span class="loading loading-ring loading-md"></span>;
@@ -11,7 +11,10 @@ const VideoResultDisplay = ({ resultMessage, videoURL, boundingBoxInfo }) => {
         return null;
     }
 
-    console.log(videoURL);
+    const videoURL = videoData
+        ? `data:video/mp4;base64,${videoData['video']}`
+        : 'None'; // Assuming videoData is the URL of the processed video
+    console.log(videoData);
     return (
         <div>
             <div className="w-l bg-base-200 border border-base-200 p-6 rounded-box justify-center">
@@ -52,7 +55,10 @@ const VideoResultDisplay = ({ resultMessage, videoURL, boundingBoxInfo }) => {
                 )}
             </div>
             <br />
-            <ResultDetails boundingBoxInfo={boundingBoxInfo} />
+            <VideoResultDetails
+                croppedFramesSaved={videoData.saved_frames}
+                appearanceCounts={videoData.logo_appearance_count}
+            />
         </div>
     );
 };
