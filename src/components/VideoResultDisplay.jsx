@@ -1,7 +1,7 @@
 import React from 'react';
 import ResultDetails from './ResultDetails';
 
-const ResultDisplay = ({ resultMessage, imageUrl, boundingBoxInfo }) => {
+const VideoResultDisplay = ({ resultMessage, imageUrl, boundingBoxInfo }) => {
     // if (resultMessage === "Processing..." && !imageUrl) {
     //     console.log("Haiiii")
     //     return <span class="loading loading-ring loading-md"></span>;
@@ -36,15 +36,16 @@ const ResultDisplay = ({ resultMessage, imageUrl, boundingBoxInfo }) => {
                     </div>
                 )}
 
-                {/* Image with standardized size */}
                 {imageUrl !== 'None' && (
                     <div className="w-full h-full relative">
-                        <img
+                        <video
                             src={imageUrl}
-                            alt="Processed Result"
-                            className="w-full h-full object-contain rounded-md" // Matching the preview style
-                            style={{ maxWidth: '100%', maxHeight: '300px' }} // Ensures the result image is within the same size limit
-                        />
+                            controls
+                            className="w-full h-full object-contain rounded-md"
+                            style={{ maxWidth: '100%', maxHeight: '300px' }}
+                        >
+                            Your browser does not support the video tag.
+                        </video>
                     </div>
                 )}
             </div>
@@ -54,4 +55,4 @@ const ResultDisplay = ({ resultMessage, imageUrl, boundingBoxInfo }) => {
     );
 };
 
-export default ResultDisplay;
+export default VideoResultDisplay;

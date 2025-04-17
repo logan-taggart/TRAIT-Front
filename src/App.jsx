@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import UploadSection from './components/UploadSection';
 import DetectionOptions from './components/DetectionOptions';
 import ResultDisplay from './components/ResultDisplay';
+import VideoResultDisplay from './components/VideoResultDisplay';
 import ImageUploadSection from './components/ImageUploadSection';
 import Header from './components/Header';
 import VideoUploadSection from './components/VideoUploadSection';
@@ -12,7 +12,7 @@ function App() {
 
     const [mainFile, setMainFile] = useState(null);
     const [mainVideo, setMainVideo] = useState(null);
-    
+
 
     const [referenceFile, setReferenceFile] = useState(null);
     const [detectionMode, setDetectionMode] = useState('all');
@@ -27,32 +27,32 @@ function App() {
     const [selectedBBColor, setSelectedBBColor] = useState('#FFFFFF');
 
     const handleSubmit = async () => {
-        if(
-             (!mainFile || (detectionMode === 'specific' && !referenceFile)) && 
-             processingMode === 'Image'
-             
-        ){
+        if (
+            (!mainFile || (detectionMode === 'specific' && !referenceFile)) &&
+            processingMode === 'Image'
+
+        ) {
             setResultMessage('Please upload the required images.');
             return;
         }
-        if(
-            (!mainVideo || (detectionMode === 'specific' && !referenceFile)) && 
+        if (
+            (!mainVideo || (detectionMode === 'specific' && !referenceFile)) &&
             processingMode === 'Video'
-            
-       ){
-           setResultMessage('Please upload the required video and reference image.');
-           return;
-       }
+
+        ) {
+            setResultMessage('Please upload the required video and reference image.');
+            return;
+        }
 
 
         const formData = new FormData();
-        if(processingMode === 'Image'){
-        formData.append('main_image', mainFile);
-        if (detectionMode === 'specific') {
-            formData.append('reference_image', referenceFile);
-            formData.append('confidence', confidenceThreshold);
-        }
-        } else if(processingMode === 'Video'){
+        if (processingMode === 'Image') {
+            formData.append('main_image', mainFile);
+            if (detectionMode === 'specific') {
+                formData.append('reference_image', referenceFile);
+                formData.append('confidence', confidenceThreshold);
+            }
+        } else if (processingMode === 'Video') {
             formData.append('main_video', mainVideo);
             if (detectionMode === 'specific') {
                 formData.append('reference_image', referenceFile);//reference image
@@ -61,11 +61,11 @@ function App() {
         }
         formData.append('bounding_box_threshold', boundingBoxThreshold);
         formData.append('bb_color', selectedBBColor);
-        
-        
-    // Debugging: Log the FormData keys and values
-    
-    
+
+
+        // Debugging: Log the FormData keys and values
+
+
 
         // Set to null and processing while the image is being processed
         setImageUrl('None');
@@ -78,8 +78,8 @@ function App() {
                     ? '/image/detect-all'
                     : '/image/detect-specific'
                 : detectionMode === 'all'
-                ? '/video/detect-all'
-                : '/video/detect-specific';
+                    ? '/video/detect-all'
+                    : '/video/detect-specific';
         try {
             const response = await fetch(`${baseURL}${endpoint}`, {
                 method: 'POST',
@@ -89,13 +89,20 @@ function App() {
             if (response.ok) {
                 // Now fetch a json object
                 // Object contains the output image and bouding box information
+
                 const data = await response.json();
                 // console.log(data)
+                console.log('Response data:', data);
                 // Save the image url from the data object.
-                setImageUrl(`data:image/jpeg;base64,${data.image}`);
-                // Save the bounding box information from the data object.
-                setBoundingBoxInfo(data.bounding_boxes);
-                setResultMessage('Processing completed successfully!');
+                if (processingMode === 'Image') {
+                    setImageUrl(`data:image/jpeg;base64,${data.image}`);
+                    // Save the bounding box information from the data object.
+                    setBoundingBoxInfo(data.bounding_boxes);
+                    setResultMessage('Processing completed successfully!');
+                } else {
+                    setImageUrl(`data:image/jpeg;base64,${data.image}`);
+                    setResultMessage('Processing completed successfully!');
+                }
             } else {
                 setResultMessage('Processing failed. Try again.');
             }
@@ -142,7 +149,7 @@ function App() {
                         Submit for Detection
                     </button>
 
-                    <ResultDisplay
+                    <VideoResultDisplay
                         resultMessage={resultMessage}
                         imageUrl={imageUrl}
                         boundingBoxInfo={boundingBoxInfo}
@@ -202,10 +209,5 @@ function App() {
         );
     }
 }
-    
-
-  
-
-
 
 export default App;
