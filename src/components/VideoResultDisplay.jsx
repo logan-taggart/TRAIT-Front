@@ -11,10 +11,10 @@ const VideoResultDisplay = ({ resultMessage, videoData }) => {
         return null;
     }
 
-    const videoURL = videoData
+    const videoURL = videoData['video']
         ? `data:video/mp4;base64,${videoData['video']}`
         : 'None'; // Assuming videoData is the URL of the processed video
-    console.log(videoData);
+
     return (
         <div>
             <div className="w-l bg-base-200 border border-base-200 p-6 rounded-box justify-center">

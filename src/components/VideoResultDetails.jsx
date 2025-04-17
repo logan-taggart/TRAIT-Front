@@ -17,7 +17,6 @@ const VideoResultDetails = ({
         return confidenceScores[confidence];
     };
 
-    console.log('Appearance Counts:', appearanceCounts);
     // Show all of the logos with bounding boxes cropped
     return (
         <div className="w-l bg-base-200 border border-base-200 p-6 rounded-box justify-center mb-4">
