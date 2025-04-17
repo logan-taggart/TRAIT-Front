@@ -13,7 +13,6 @@ function App() {
     const [mainFile, setMainFile] = useState(null);
     const [mainVideo, setMainVideo] = useState(null);
 
-
     const [referenceFile, setReferenceFile] = useState(null);
     const [detectionMode, setDetectionMode] = useState('all');
     const [confidenceThreshold, setConfidenceThreshold] = useState(3);
@@ -22,6 +21,7 @@ function App() {
     const [resultMessage, setResultMessage] = useState('');
     const [boundingBoxInfo, setBoundingBoxInfo] = useState([]);
     const [processingMode, setProcessingMode] = useState('Image');
+    const [videoURL, setVideoURL] = useState('None');
 
     // Default white
     const [selectedBBColor, setSelectedBBColor] = useState('#FFFFFF');
@@ -30,7 +30,6 @@ function App() {
         if (
             (!mainFile || (detectionMode === 'specific' && !referenceFile)) &&
             processingMode === 'Image'
-
         ) {
             setResultMessage('Please upload the required images.');
             return;
@@ -38,12 +37,12 @@ function App() {
         if (
             (!mainVideo || (detectionMode === 'specific' && !referenceFile)) &&
             processingMode === 'Video'
-
         ) {
-            setResultMessage('Please upload the required video and reference image.');
+            setResultMessage(
+                'Please upload the required video and reference image.',
+            );
             return;
         }
-
 
         const formData = new FormData();
         if (processingMode === 'Image') {
@@ -55,17 +54,14 @@ function App() {
         } else if (processingMode === 'Video') {
             formData.append('main_video', mainVideo);
             if (detectionMode === 'specific') {
-                formData.append('reference_image', referenceFile);//reference image
+                formData.append('reference_image', referenceFile); //reference image
                 formData.append('confidence', confidenceThreshold);
             }
         }
         formData.append('bounding_box_threshold', boundingBoxThreshold);
         formData.append('bb_color', selectedBBColor);
 
-
         // Debugging: Log the FormData keys and values
-
-
 
         // Set to null and processing while the image is being processed
         setImageUrl('None');
@@ -78,8 +74,8 @@ function App() {
                     ? '/image/detect-all'
                     : '/image/detect-specific'
                 : detectionMode === 'all'
-                    ? '/video/detect-all'
-                    : '/video/detect-specific';
+                ? '/video/detect-all'
+                : '/video/detect-specific';
         try {
             const response = await fetch(`${baseURL}${endpoint}`, {
                 method: 'POST',
@@ -100,7 +96,8 @@ function App() {
                     setBoundingBoxInfo(data.bounding_boxes);
                     setResultMessage('Processing completed successfully!');
                 } else {
-                    setImageUrl(`data:image/jpeg;base64,${data.image}`);
+                    // Video processing
+                    setVideoURL(`data:video/mp4;base64,${data.video}`);
                     setResultMessage('Processing completed successfully!');
                 }
             } else {
@@ -112,7 +109,8 @@ function App() {
         }
     };
 
-    if (processingMode === 'Video') { //if we are processing a video
+    if (processingMode === 'Video') {
+        //if we are processing a video
         return (
             <div>
                 <Header
@@ -151,7 +149,7 @@ function App() {
 
                     <VideoResultDisplay
                         resultMessage={resultMessage}
-                        imageUrl={imageUrl}
+                        videoURL={videoURL}
                         boundingBoxInfo={boundingBoxInfo}
                     />
                 </div>

@@ -18,11 +18,12 @@ const ResultDisplay = ({ resultMessage, imageUrl, boundingBoxInfo }) => {
                 {resultMessage && (
                     <div className="flex justify-center items-center mb-4">
                         <p
-                            className={`${resultMessage !==
+                            className={`${
+                                resultMessage !==
                                 'Processing completed successfully!'
-                                ? 'text-red-500' // Red text for error
-                                : 'text-green-500' // Green text for success
-                                } text-center`}
+                                    ? 'text-red-500' // Red text for error
+                                    : 'text-green-500' // Green text for success
+                            } text-center`}
                         >
                             {resultMessage}
                         </p>
