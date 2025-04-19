@@ -41,7 +41,7 @@ const VideoResultDisplay = ({ resultMessage, videoData }) => {
                     </div>
                 )}
 
-                {resultMessage !== 'Processing...' && (
+                {resultMessage === 'Processing completed successfully!' && (
                     <div className="w-full h-full relative">
                         <video
                             src="http://127.0.0.1:5174/video/fetch-processed-video"
