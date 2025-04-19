@@ -1,5 +1,5 @@
 import React from 'react';
-import UploadSection from './UploadSection';
+import UploadSection from '../UploadSection';
 
 // This is where the user will upload the main video and the reference image
 

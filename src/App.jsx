@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import DetectionOptions from './components/DetectionOptions';
 import ResultDisplay from './components/ResultDisplay';
-import VideoResultDisplay from './components/VideoResultDisplay';
+import VideoResultDisplay from './components/videoComponents/VideoResultDisplay';
 import ImageUploadSection from './components/ImageUploadSection';
 import Header from './components/Header';
-import VideoUploadSection from './components/VideoUploadSection';
+import VideoUploadSection from './components/videoComponents/VideoUploadSection';
 import './App.css';
 
 function App() {

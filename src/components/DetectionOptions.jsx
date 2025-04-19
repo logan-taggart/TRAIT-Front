@@ -1,7 +1,7 @@
-import React from 'react'
-import SearchSpecificLogoOptions from './SearchSpecificLogoOptions'
-import ThresholdInput from './ThresholdInput'
-import ConfidenceThresholdInput from './ConfidenceThresholdInput'
+import React from 'react';
+import SearchSpecificLogoOptions from './SearchSpecificLogoOptions';
+import ThresholdInput from './ThresholdInput';
+import ConfidenceThresholdInput from './ConfidenceThresholdInput';
 
 const DetectionOptions = ({
     detectionMode,
@@ -14,8 +14,8 @@ const DetectionOptions = ({
     setSelectedBBColor,
 }) => {
     const handleDetectionModeChange = (mode) => {
-        setDetectionMode(mode)
-    }
+        setDetectionMode(mode);
+    };
 
     return (
         <div>
@@ -66,7 +66,7 @@ const DetectionOptions = ({
                 />
             </fieldset>
         </div>
-    )
-}
+    );
+};
 
-export default DetectionOptions
+export default DetectionOptions;

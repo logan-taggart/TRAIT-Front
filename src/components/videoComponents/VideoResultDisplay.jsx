@@ -35,16 +35,16 @@ const VideoResultDisplay = ({ resultMessage, videoData }) => {
                 )}
 
                 {/* Loading Spinner */}
-                {videoURL === 'None' && resultMessage == 'Processing...' && (
+                {videoURL === 'None' && resultMessage === 'Processing...' && (
                     <div className="flex justify-center items-center h-full w-full">
                         <span className="loading loading-spinner loading-xl"></span>
                     </div>
                 )}
 
-                {videoURL !== 'None' && (
+                {resultMessage !== 'Processing...' && (
                     <div className="w-full h-full relative">
                         <video
-                            src={videoURL}
+                            src="http://127.0.0.1:5174/video/fetch-processed-video"
                             controls
                             className="w-full h-full object-contain rounded-md"
                             style={{ maxWidth: '100%', maxHeight: '300px' }}
