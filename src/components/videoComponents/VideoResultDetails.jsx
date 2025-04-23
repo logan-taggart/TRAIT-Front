@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const VideoResultDetails = ({
     croppedFramesSaved = [],
     appearanceCounts = [],
 }) => {
     const [visibleFrames, setVisibleFrames] = useState(croppedFramesSaved);
+
+    useEffect(() => {
+        setVisibleFrames(croppedFramesSaved);
+    }, [croppedFramesSaved]);
 
     if (!visibleFrames || visibleFrames.length === 0) {
         return null;
