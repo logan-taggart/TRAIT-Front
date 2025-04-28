@@ -17,7 +17,9 @@ const VideoResultDisplay = ({ resultMessage, videoData }) => {
 
     return (
         <div>
-            <div className="w-l bg-base-200 border border-base-200 p-6 rounded-box justify-center">
+            <fieldset className="fieldset w-l bg-base-200 border border-base-200 p-6 rounded-box justify-center">
+                <legend className="fieldset-legend">Detected Logos</legend>
+
                 {/* Red text if the message was not successful */}
                 {resultMessage && (
                     <div className="flex justify-center items-center mb-4">
@@ -27,7 +29,7 @@ const VideoResultDisplay = ({ resultMessage, videoData }) => {
                                 'Processing completed successfully!'
                                     ? 'text-red-500' // Red text for error
                                     : 'text-green-500' // Green text for success
-                            } text-center`}
+                            } text-center text-xl`}
                         >
                             {resultMessage}
                         </p>
@@ -53,12 +55,14 @@ const VideoResultDisplay = ({ resultMessage, videoData }) => {
                         </video>
                     </div>
                 )}
-            </div>
-            <br />
-            <VideoResultDetails
-                croppedFramesSaved={videoData.saved_frames}
-                appearanceCounts={videoData.logo_appearance_count}
-            />
+            </fieldset>
+
+            {resultMessage === 'Processing completed successfully!' && (
+                <VideoResultDetails
+                    croppedFramesSaved={videoData.saved_frames}
+                    appearanceCounts={videoData.logo_appearance_count}
+                />
+            )}
         </div>
     );
 };

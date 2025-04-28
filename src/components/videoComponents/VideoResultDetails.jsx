@@ -23,11 +23,13 @@ const VideoResultDetails = ({
     };
 
     const handleRemove = (indexToRemove) => {
-        setVisibleFrames(prev => prev.filter((_, i) => i !== indexToRemove));
+        setVisibleFrames((prev) => prev.filter((_, i) => i !== indexToRemove));
     };
 
     return (
-        <div className="w-l bg-base-200 border border-base-200 p-6 rounded-box justify-center mb-4">
+        <fieldset className="fieldset w-l bg-base-200 border border-base-200 p-6 rounded-box justify-center mb-4">
+            <legend className="fieldset-legend">Detected Logo Metrics</legend>
+
             {visibleFrames.map((frame, index) => (
                 <div key={index} className="flex items-center gap-4 mb-4">
                     <img
@@ -36,8 +38,9 @@ const VideoResultDetails = ({
                         style={{ maxWidth: '100%', maxHeight: '200px' }}
                     />
                     <div className="text-base flex-1">
-                        This logo first appeared in frame {frame.frame_idx} and was in approximately{' '}
-                        {appearanceCounts[index] * 5 + ' '} frames of the video
+                        This logo first appeared in frame {frame.frame_idx} and
+                        was in approximately {appearanceCounts[index] * 5 + ' '}{' '}
+                        frames of the video
                     </div>
                     <button
                         onClick={() => handleRemove(index)}
@@ -48,7 +51,7 @@ const VideoResultDetails = ({
                     </button>
                 </div>
             ))}
-        </div>
+        </fieldset>
     );
 };
 
