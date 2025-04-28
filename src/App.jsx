@@ -16,9 +16,10 @@ function App() {
     const [referenceFile, setReferenceFile] = useState(null);
     const [detectionMode, setDetectionMode] = useState('all');
     const [confidenceThreshold, setConfidenceThreshold] = useState(3);
-    const [boundingBoxThreshold, setBoundingBoxThreshold] = useState(50);
+    const [boundingBoxThreshold, setBoundingBoxThreshold] = useState(25);
     const [imageUrl, setImageUrl] = useState('None');
-    const [resultMessage, setResultMessage] = useState('');
+    const [imageResultMessage, setImageResultMessage] = useState('');
+    const [videoResultMessage, setVideoResultMessage] = useState('');
     const [boundingBoxInfo, setBoundingBoxInfo] = useState([]);
     const [processingMode, setProcessingMode] = useState('Image');
     const [videoData, setVideoData] = useState('None');
@@ -31,16 +32,14 @@ function App() {
             (!mainFile || (detectionMode === 'specific' && !referenceFile)) &&
             processingMode === 'Image'
         ) {
-            setResultMessage('Please upload the required images.');
+            setImageResultMessage('Please upload the required images.');
             return;
         }
         if (
             (!mainVideo || (detectionMode === 'specific' && !referenceFile)) &&
             processingMode === 'Video'
         ) {
-            setResultMessage(
-                'Please upload the required video and reference image.',
-            );
+            setVideoResultMessage('Please upload the required video and reference image.');
             return;
         }
 
@@ -61,12 +60,14 @@ function App() {
         formData.append('bounding_box_threshold', boundingBoxThreshold);
         formData.append('bb_color', selectedBBColor);
 
-        // Debugging: Log the FormData keys and values
-
-        // Set to null and processing while the image is being processed
+        // Reset previous result state
         setImageUrl('None');
-        setResultMessage('Processing...');
         setBoundingBoxInfo([]);
+        if (processingMode === 'Image') {
+            setImageResultMessage('Processing...');
+        } else {
+            setVideoResultMessage('Processing...');
+        }
 
         const endpoint =
             processingMode === 'Image'
@@ -76,6 +77,7 @@ function App() {
                 : detectionMode === 'all'
                 ? '/video/detect-all'
                 : '/video/detect-specific';
+
         try {
             const response = await fetch(`${baseURL}${endpoint}`, {
                 method: 'POST',
@@ -87,38 +89,39 @@ function App() {
                 // Object contains the output image and bouding box information
 
                 const data = await response.json();
-                // console.log(data)
                 console.log('Response data:', data);
                 // Save the image url from the data object.
                 if (processingMode === 'Image') {
                     setImageUrl(`data:image/jpeg;base64,${data.image}`);
-                    // Save the bounding box information from the data object.
                     setBoundingBoxInfo(data.bounding_boxes);
-                    setResultMessage('Processing completed successfully!');
+                    setImageResultMessage('Processing completed successfully!');
                 } else {
-                    // Video processing
                     setVideoData(data);
-                    setResultMessage('Processing completed successfully!');
+                    setBoundingBoxInfo(data.bounding_boxes);
+                    setVideoResultMessage('Processing completed successfully!');
                 }
             } else {
-                setResultMessage('Processing failed. Try again.');
+                if (processingMode === 'Image') {
+                    setImageResultMessage('Processing failed. Try again.');
+                } else {
+                    setVideoResultMessage('Processing failed. Try again.');
+                }
             }
         } catch (error) {
-            setResultMessage('Error processing the file.');
             console.error(error);
+            if (processingMode === 'Image') {
+                setImageResultMessage('Error processing the file.');
+            } else {
+                setVideoResultMessage('Error processing the file.');
+            }
         }
     };
 
     if (processingMode === 'Video') {
-        //if we are processing a video
         return (
             <div>
-                <Header
-                    setProcessingMode={setProcessingMode}
-                    processingMode={processingMode}
-                />
-                <div className=" flex flex-col items-center justify-center text-white text-2xl">
-                    {/* Main and reference video upload */}
+                <Header setProcessingMode={setProcessingMode} processingMode={processingMode} />
+                <div className="flex flex-col items-center justify-center text-white text-2xl">
                     <VideoUploadSection
                         mainVideo={mainVideo}
                         setMainVideo={setMainVideo}
@@ -127,28 +130,23 @@ function App() {
                         detectionMode={detectionMode}
                     />
 
-                    <div className="">
-                        <DetectionOptions
-                            detectionMode={detectionMode}
-                            setDetectionMode={setDetectionMode}
-                            setConfidenceThreshold={setConfidenceThreshold}
-                            confidenceThreshold={confidenceThreshold}
-                            setBoundingBoxThreshold={setBoundingBoxThreshold}
-                            boundingBoxThreshold={boundingBoxThreshold}
-                            setSelectedBBColor={setSelectedBBColor}
-                            selectedBBColor={selectedBBColor}
-                        />
-                    </div>
+                    <DetectionOptions
+                        detectionMode={detectionMode}
+                        setDetectionMode={setDetectionMode}
+                        setConfidenceThreshold={setConfidenceThreshold}
+                        confidenceThreshold={confidenceThreshold}
+                        setBoundingBoxThreshold={setBoundingBoxThreshold}
+                        boundingBoxThreshold={boundingBoxThreshold}
+                        setSelectedBBColor={setSelectedBBColor}
+                        selectedBBColor={selectedBBColor}
+                    />
 
-                    <button
-                        className="mt-4 mb-4 btn btn-success btn-xl"
-                        onClick={handleSubmit}
-                    >
+                    <button className="mt-4 mb-4 btn btn-success btn-xl" onClick={handleSubmit}>
                         Submit for Detection
                     </button>
 
                     <VideoResultDisplay
-                        resultMessage={resultMessage}
+                        resultMessage={videoResultMessage}
                         videoData={videoData}
                         boundingBoxInfo={boundingBoxInfo}
                     />
@@ -157,18 +155,11 @@ function App() {
         );
     }
 
-    // Render what we need for the image processing
     if (processingMode === 'Image') {
-        // We can probably make this its own component eventually...
         return (
-            <div className="">
-                <Header
-                    setProcessingMode={setProcessingMode}
-                    processingMode={processingMode}
-                />
-
-                <div className=" flex flex-col items-center justify-center text-white text-2xl">
-                    {/* Main and reference image upload */}
+            <div>
+                <Header setProcessingMode={setProcessingMode} processingMode={processingMode} />
+                <div className="flex flex-col items-center justify-center text-white text-2xl">
                     <ImageUploadSection
                         mainFile={mainFile}
                         setMainFile={setMainFile}
@@ -177,28 +168,23 @@ function App() {
                         detectionMode={detectionMode}
                     />
 
-                    <div className="">
-                        <DetectionOptions
-                            detectionMode={detectionMode}
-                            setDetectionMode={setDetectionMode}
-                            setConfidenceThreshold={setConfidenceThreshold}
-                            confidenceThreshold={confidenceThreshold}
-                            setBoundingBoxThreshold={setBoundingBoxThreshold}
-                            boundingBoxThreshold={boundingBoxThreshold}
-                            setSelectedBBColor={setSelectedBBColor}
-                            selectedBBColor={selectedBBColor}
-                        />
-                    </div>
+                    <DetectionOptions
+                        detectionMode={detectionMode}
+                        setDetectionMode={setDetectionMode}
+                        setConfidenceThreshold={setConfidenceThreshold}
+                        confidenceThreshold={confidenceThreshold}
+                        setBoundingBoxThreshold={setBoundingBoxThreshold}
+                        boundingBoxThreshold={boundingBoxThreshold}
+                        setSelectedBBColor={setSelectedBBColor}
+                        selectedBBColor={selectedBBColor}
+                    />
 
-                    <button
-                        className="mt-4 mb-4 btn btn-success btn-xl"
-                        onClick={handleSubmit}
-                    >
+                    <button className="mt-4 mb-4 btn btn-success btn-xl" onClick={handleSubmit}>
                         Submit for Detection
                     </button>
 
                     <ResultDisplay
-                        resultMessage={resultMessage}
+                        resultMessage={imageResultMessage}
                         imageUrl={imageUrl}
                         boundingBoxInfo={boundingBoxInfo}
                     />
