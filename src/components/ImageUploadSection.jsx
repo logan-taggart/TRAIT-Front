@@ -1,8 +1,6 @@
 import React from 'react';
 import UploadSection from './UploadSection';
 
-// This is where the user will upload the main image and the reference logo
-
 const ImageUploadSection = ({
     mainFile,
     setMainFile,
@@ -17,6 +15,7 @@ const ImageUploadSection = ({
                     label="Upload Main Image"
                     file={mainFile}
                     setFile={setMainFile}
+                    type="image" // new validation
                 />
 
                 {detectionMode === 'specific' && (
@@ -24,6 +23,7 @@ const ImageUploadSection = ({
                         label="Upload Reference Logo"
                         file={referenceFile}
                         setFile={setReferenceFile}
+                        type="image" // new validation
                     />
                 )}
             </div>

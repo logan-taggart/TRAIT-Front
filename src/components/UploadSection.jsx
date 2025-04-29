@@ -1,35 +1,46 @@
 import React, { useState, useRef, useEffect } from 'react';
 
-// This is the UploadSection component that will be used to upload images
-// It will display a dashed border that can be clicked to open the file dialog
-// label is that the text says, and the file/setFile are the useState variables
-const UploadSection = ({ label, file, setFile }) => {
+const UploadSection = ({ label, file, setFile, type = 'image' }) => {
     const [imagePreview, setImagePreview] = useState(null);
-    const fileInputRef = useRef(null); // Create a ref for the file input
+    const [error, setError] = useState('');
+    const fileInputRef = useRef(null);
 
-    // Handle the file change event
+    // Define allowed MIME types based on section type
+    const allowedTypesMap = {
+        image: ['image/png', 'image/jpeg', 'image/jpg'],
+        video: ['video/mp4'],
+    };
+    const allowedTypes = allowedTypesMap[type] || [];
+
     const handleFileChange = (event) => {
         const selectedFile = event.target.files[0];
-        if (selectedFile) {
-            setFile(selectedFile);
-    
-            // Only generate preview if it's an image
-            if (selectedFile.type.startsWith('image/')) {
-                const reader = new FileReader();
-                reader.onloadend = () => {
-                    setImagePreview(reader.result);
-                };
-                reader.readAsDataURL(selectedFile);
-            } else {
-                setImagePreview(null); // No preview for non-image files
-            }
+        if (!selectedFile) return;
+
+        if (!allowedTypes.includes(selectedFile.type)) {
+            setError(`Only ${type.toUpperCase()} files are allowed.`);
+            setFile(null);
+            setImagePreview(null);
+            return;
+        }
+
+        // Clear error and set the file
+        setError('');
+        setFile(selectedFile);
+
+        if (type === 'image') {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setImagePreview(reader.result);
+            };
+            reader.readAsDataURL(selectedFile);
+        } else {
+            setImagePreview(null); // No preview for video
         }
     };
 
-    // Update the image preview whenever the file changes
-    // Makes the reference image preview appear when you change from "Search all" back to "Search specific"
+    // Update preview on prop change
     useEffect(() => {
-        if (file) {
+        if (file && type === 'image') {
             if (file.type.startsWith('image/')) {
                 const reader = new FileReader();
                 reader.onloadend = () => {
@@ -37,53 +48,51 @@ const UploadSection = ({ label, file, setFile }) => {
                 };
                 reader.readAsDataURL(file);
             } else {
-                setImagePreview(null); // No preview if not image
+                setImagePreview(null);
             }
         } else {
             setImagePreview(null);
         }
-    }, [file]);
-    
+    }, [file, type]);
 
     const handleClick = () => {
-        // Trigger the file input click using the ref
         if (fileInputRef.current) {
             fileInputRef.current.click();
         }
     };
 
     return (
-        <div className=" w-l bg-base-200 border border-base-200 p-6 rounded-box card card-dash bg-base-100 w-96 p-4 justify-center">
+        <div className="w-96 bg-base-100 border border-base-200 p-6 rounded-box">
             <div
                 className={`border-4 border-dashed p-4 h-full rounded-md cursor-pointer ${
                     imagePreview ? 'border-transparent' : 'border-primary'
                 }`}
-                onClick={handleClick} // Trigger the file input click when the dashed border is clicked
+                onClick={handleClick}
             >
                 <div className="flex justify-center items-center h-full">
-                    {/* If an image is selected, replace label with the image preview */}
                     {imagePreview ? (
-                        <div className="w-full h-full relative cursor-pointer">
-                            <img
-                                src={imagePreview}
-                                alt="Preview"
-                                className="w-full h-full object-cover rounded-md"
-                            />
-                        </div>
+                        <img
+                            src={imagePreview}
+                            alt="Preview"
+                            className="w-full h-full object-cover rounded-md"
+                        />
                     ) : (
                         <span className="text-primary text-center w-full">
-                            {' '}
-                            {file ? file.name : label}{' '}
+                            {file ? file.name : label}
                         </span>
                     )}
                 </div>
             </div>
 
-            {/* Hidden file input */}
+            {error && (
+                <div className="mt-2 text-red-500 text-sm text-center">{error}</div>
+            )}
+
             <input
                 type="file"
                 ref={fileInputRef}
                 onChange={handleFileChange}
+                accept={type === 'image' ? 'image/*' : 'video/mp4'}
                 hidden
             />
         </div>

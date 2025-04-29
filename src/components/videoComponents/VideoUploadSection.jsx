@@ -17,6 +17,7 @@ const VideoUploadSection = ({
                     label="Upload Main Video"
                     file={mainVideo}
                     setFile={setMainVideo}
+                    type = "video" // new validation
                 />
 
                 {detectionMode === 'specific' && (
@@ -24,6 +25,7 @@ const VideoUploadSection = ({
                         label="Upload Reference Image"
                         file={referenceFile}
                         setFile={setReferenceFile}
+                        type="image" // new validation
                     />
                 )}
             </div>
