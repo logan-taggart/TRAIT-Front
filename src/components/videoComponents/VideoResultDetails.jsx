@@ -39,7 +39,7 @@ const VideoResultDetails = ({
                     />
                     <div className="text-base flex-1">
                         This logo first appeared in frame {frame.frame_idx} and
-                        was in approximately {appearanceCounts[index] * 5 + ' '}{' '}
+                        was in approximately {appearanceCounts[index] + ' '}
                         frames of the video
                     </div>
                     <button
