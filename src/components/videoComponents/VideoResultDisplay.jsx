@@ -1,5 +1,7 @@
 import React from 'react';
+import { useState, useEffect } from 'react';
 import VideoResultDetails from './VideoResultDetails';
+import ProgressBar from './ProgressBar';
 
 const VideoResultDisplay = ({ resultMessage, videoData }) => {
     // if (resultMessage === "Processing..." && !videoURL) {
@@ -11,9 +13,28 @@ const VideoResultDisplay = ({ resultMessage, videoData }) => {
         return null;
     }
 
-    const videoURL = videoData['video']
-        ? `data:video/mp4;base64,${videoData['video']}`
-        : 'None'; // Assuming videoData is the URL of the processed video
+    const [progress, setProgress] = useState({
+        progress_percentage: 0,
+        total_frames: 0,
+    });
+
+    useEffect(() => {
+        if (resultMessage !== 'Processing completed successfully!') {
+            const intervalId = setInterval(() => {
+                fetch('http://localhost:5174/video/fetch-progress')
+                    .then((response) => response.json())
+                    .then((data) => {
+                        setProgress(data);
+                    })
+                    .catch((error) => {
+                        console.error('Error fetching progress:', error);
+                    });
+            }, 1000);
+
+            // Clear interval when resultMessage updates or on unmount
+            return () => clearInterval(intervalId);
+        }
+    }, [resultMessage]); // <- run effect when resultMessage changes
 
     return (
         <div>
@@ -36,11 +57,11 @@ const VideoResultDisplay = ({ resultMessage, videoData }) => {
                     </div>
                 )}
 
-                {/* Loading Spinner */}
-                {videoURL === 'None' && resultMessage === 'Processing...' && (
-                    <div className="flex justify-center items-center h-full w-full">
-                        <span className="loading loading-spinner loading-xl"></span>
-                    </div>
+                {/* Loading Bar */}
+                {resultMessage === 'Processing...' && progress && (
+                    <ProgressBar
+                        progress_percent={progress['progress_percentage']}
+                    />
                 )}
 
                 {resultMessage === 'Processing completed successfully!' && (
