@@ -38,7 +38,7 @@ const Header = ({ setProcessingMode, processingMode }) => {
                 </ul>
             </div>
 
-            {/* Pulsing Line. Isnt this pretty cool?! */}
+            
             <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-blue-300 via-blue-400 to-blue-500 animate-pulse"></div>
         </div>
     );
