@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 const VideoResultDetails = ({
     croppedFramesSaved = [],
     appearanceCounts = [],
+    totalFrames = 0,
 }) => {
     const [visibleFrames, setVisibleFrames] = useState(croppedFramesSaved);
 
@@ -40,7 +41,9 @@ const VideoResultDetails = ({
                     <div className="text-base flex-1">
                         This logo first appeared in frame {frame.frame_idx} and
                         was in approximately {appearanceCounts[index] + ' '}
-                        frames of the video
+                        frames of the video.{' '}
+                        {(appearanceCounts[index] / totalFrames).toFixed(3)}% of
+                        the video.
                     </div>
                     <button
                         onClick={() => handleRemove(index)}

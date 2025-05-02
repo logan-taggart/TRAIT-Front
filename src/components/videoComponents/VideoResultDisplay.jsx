@@ -82,6 +82,7 @@ const VideoResultDisplay = ({ resultMessage, videoData }) => {
                 <VideoResultDetails
                     croppedFramesSaved={videoData.saved_frames}
                     appearanceCounts={videoData.logo_appearance_count}
+                    totalFrames={progress.total_frames}
                 />
             )}
         </div>
