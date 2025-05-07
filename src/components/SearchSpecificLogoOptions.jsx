@@ -1,5 +1,5 @@
-import React from 'react'
-import ConfidenceThresholdInput from './ConfidenceThresholdInput'
+import React from 'react';
+import ConfidenceThresholdInput from './ConfidenceThresholdInput';
 
 // Displays the Embedding Algorithm and Confidence Threshold options for specific detection mode
 const DetectionSpecificOptions = ({
@@ -15,11 +15,11 @@ const DetectionSpecificOptions = ({
                     thresholdTitle="Confidence Threshold"
                     confidenceThreshold={confidenceThreshold}
                     setConfidenceThreshold={setConfidenceThreshold}
-                    tooltipDescription="Confidence Threshold determines how certain the model must be before detecting a logo."
+                    tooltipDescription="Confidence Threshold controls how visually similar a detected logo must be to the reference logo. Higher values require nearly identical matches, while lower values allow more loosely similar logos to be detected."
                 />
             )}
         </div>
-    )
-}
+    );
+};
 
-export default DetectionSpecificOptions
+export default DetectionSpecificOptions;

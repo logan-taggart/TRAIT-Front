@@ -31,7 +31,7 @@ const ToolTipDropDown = ({ title, description }) => {
                 tabIndex="0"
                 className="card card-sm dropdown-content bg-base-100 rounded-box z-1 w-64 shadow-sm"
             >
-                <div tabIndex="0" className="card-body">
+                <div tabIndex="0" className="card-body border-2 rounded-box">
                     {/* <h2 className="card-title">{title}</h2> */}
                     <p>{description}</p>
                 </div>

@@ -52,7 +52,7 @@ const DetectionOptions = ({
                         boundingThreshold={boundingBoxThreshold}
                         setBoundingThreshold={setBoundingBoxThreshold}
                         tooltipDescription={
-                            'Bounding Box Threshold is the minimum confidence score for a bounding box to be considered, the lower the threshold, the more bounding boxes will be considered.'
+                            'Bounding Box Threshold sets the minimum confidence score required for the model to consider a detected object as a logo. Higher values mean only highly confident detections are shown, while lower values allow more detections, including less certain ones.'
                         }
                         selectedBBColor={selectedBBColor}
                         setSelectedBBColor={setSelectedBBColor}

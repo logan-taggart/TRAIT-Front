@@ -1,5 +1,6 @@
 import React from 'react';
 import ResultDetails from './ResultDetails';
+import ProgressBar from './videoComponents/ProgressBar';
 
 const ResultDisplay = ({ resultMessage, imageUrl, boundingBoxInfo }) => {
     if (!resultMessage) {
@@ -27,11 +28,9 @@ const ResultDisplay = ({ resultMessage, imageUrl, boundingBoxInfo }) => {
                     </div>
                 )}
 
-                {/* Loading Spinner */}
+                {/* Loading Bar */}
                 {imageUrl === 'None' && resultMessage === 'Processing...' && (
-                    <div className="flex justify-center items-center h-full w-full">
-                        <span className="loading loading-spinner loading-xl"></span>
-                    </div>
+                    <ProgressBar progress_percent={100} /> // Make the loading bar full
                 )}
 
                 {/* Processed Image */}
