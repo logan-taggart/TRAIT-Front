@@ -6,6 +6,7 @@ import ImageUploadSection from './components/ImageUploadSection';
 import Header from './components/Header';
 import VideoUploadSection from './components/videoComponents/VideoUploadSection';
 import './App.css';
+import ProcessingButton from './components/ProcessingButton';
 
 function App() {
     const baseURL = 'http://127.0.0.1:5174';
@@ -39,7 +40,9 @@ function App() {
             (!mainVideo || (detectionMode === 'specific' && !referenceFile)) &&
             processingMode === 'Video'
         ) {
-            setVideoResultMessage('Please upload the required video and reference image.');
+            setVideoResultMessage(
+                'Please upload the required video and reference image.',
+            );
             return;
         }
 
@@ -117,10 +120,29 @@ function App() {
         }
     };
 
+    const handleCancelProcessing = async () => {
+        try {
+            const response = await fetch(`${baseURL}/video/cancel`, {
+                method: 'POST',
+            });
+            if (response.ok) {
+                setVideoResultMessage('Processing canceled.');
+            } else {
+                setVideoResultMessage('Failed to cancel processing.');
+            }
+        } catch (error) {
+            console.error(error);
+            setVideoResultMessage('Error canceling processing.');
+        }
+    };
+
     if (processingMode === 'Video') {
         return (
             <div>
-                <Header setProcessingMode={setProcessingMode} processingMode={processingMode} />
+                <Header
+                    setProcessingMode={setProcessingMode}
+                    processingMode={processingMode}
+                />
                 <div className="flex flex-col items-center justify-center text-white text-2xl">
                     <VideoUploadSection
                         mainVideo={mainVideo}
@@ -141,9 +163,11 @@ function App() {
                         selectedBBColor={selectedBBColor}
                     />
 
-                    <button className="mt-4 mb-4 btn btn-success btn-xl" onClick={handleSubmit}>
-                        Submit for Detection
-                    </button>
+                    <ProcessingButton
+                        handleCancelProcessing={handleCancelProcessing}
+                        handleSubmit={handleSubmit}
+                        videoResultMessage={videoResultMessage}
+                    />
 
                     <VideoResultDisplay
                         resultMessage={videoResultMessage}
@@ -158,7 +182,10 @@ function App() {
     if (processingMode === 'Image') {
         return (
             <div>
-                <Header setProcessingMode={setProcessingMode} processingMode={processingMode} />
+                <Header
+                    setProcessingMode={setProcessingMode}
+                    processingMode={processingMode}
+                />
                 <div className="flex flex-col items-center justify-center text-white text-2xl">
                     <ImageUploadSection
                         mainFile={mainFile}
@@ -179,7 +206,10 @@ function App() {
                         selectedBBColor={selectedBBColor}
                     />
 
-                    <button className="mt-4 mb-4 btn btn-success btn-xl" onClick={handleSubmit}>
+                    <button
+                        className="mt-4 mb-4 btn btn-success btn-xl"
+                        onClick={handleSubmit}
+                    >
                         Submit for Detection
                     </button>
 
