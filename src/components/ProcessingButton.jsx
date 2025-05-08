@@ -1,13 +1,12 @@
 import React from 'react';
 
 const ProcessingButton = ({
-    videoResultMessage,
+    resultMessage,
     handleSubmit,
     handleCancelProcessing,
 }) => {
-    console.log(videoResultMessage);
     {
-        return videoResultMessage == 'Processing...' ? (
+        return resultMessage === 'Processing...' ? (
             <button
                 className="mt-4 mb-4 btn btn-error btn-xl"
                 onClick={handleCancelProcessing}

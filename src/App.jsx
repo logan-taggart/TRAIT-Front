@@ -93,17 +93,31 @@ function App() {
 
                 const data = await response.json();
                 console.log('Response data:', data);
+
+                // check if the response contains a message
+                // A message can be returned if the process is canceled
+                if (data.message) {
+                    if (processingMode === 'Image') {
+                        setImageResultMessage(data.message);
+                    } else {
+                        setVideoResultMessage(data.message);
+                    }
+                    return;
+                }
+
                 // Save the image url from the data object.
                 if (processingMode === 'Image') {
                     setImageUrl(`data:image/jpeg;base64,${data.image}`);
                     setBoundingBoxInfo(data.bounding_boxes);
                     setImageResultMessage('Processing completed successfully!');
                 } else {
+                    // Video processing
                     setVideoData(data);
                     setBoundingBoxInfo(data.bounding_boxes);
                     setVideoResultMessage('Processing completed successfully!');
                 }
             } else {
+                // Response code not ok
                 if (processingMode === 'Image') {
                     setImageResultMessage('Processing failed. Try again.');
                 } else {
@@ -121,18 +135,37 @@ function App() {
     };
 
     const handleCancelProcessing = async () => {
-        try {
-            const response = await fetch(`${baseURL}/video/cancel`, {
-                method: 'POST',
-            });
-            if (response.ok) {
-                setVideoResultMessage('Processing canceled.');
-            } else {
-                setVideoResultMessage('Failed to cancel processing.');
+        if (processingMode === 'Image') {
+            try {
+                const response = await fetch(`${baseURL}/image/cancel`, {
+                    method: 'POST',
+                });
+
+                if (response.ok) {
+                    setImageResultMessage('Processing cancelled');
+                } else {
+                    setImageResultMessage('Failed to cancel processing.');
+                }
+            } catch (error) {
+                console.error(error);
+                setImageResultMessage('Error canceling processing.');
             }
-        } catch (error) {
-            console.error(error);
-            setVideoResultMessage('Error canceling processing.');
+        } else if (processingMode === 'Video') {
+            // Cancel video processing
+            try {
+                const response = await fetch(`${baseURL}/video/cancel`, {
+                    method: 'POST',
+                });
+
+                if (response.ok) {
+                    setVideoResultMessage('Processing cancelled');
+                } else {
+                    setVideoResultMessage('Failed to cancel processing.');
+                }
+            } catch (error) {
+                console.error(error);
+                setVideoResultMessage('Error canceling processing.');
+            }
         }
     };
 
@@ -166,7 +199,7 @@ function App() {
                     <ProcessingButton
                         handleCancelProcessing={handleCancelProcessing}
                         handleSubmit={handleSubmit}
-                        videoResultMessage={videoResultMessage}
+                        resultMessage={videoResultMessage}
                     />
 
                     <VideoResultDisplay
@@ -206,12 +239,11 @@ function App() {
                         selectedBBColor={selectedBBColor}
                     />
 
-                    <button
-                        className="mt-4 mb-4 btn btn-success btn-xl"
-                        onClick={handleSubmit}
-                    >
-                        Submit for Detection
-                    </button>
+                    <ProcessingButton
+                        handleCancelProcessing={handleCancelProcessing}
+                        handleSubmit={handleSubmit}
+                        resultMessage={imageResultMessage}
+                    />
 
                     <ResultDisplay
                         resultMessage={imageResultMessage}

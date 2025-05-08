@@ -19,7 +19,8 @@ const VideoResultDisplay = ({ resultMessage, videoData }) => {
     });
 
     useEffect(() => {
-        if (resultMessage !== 'Processing completed successfully!') {
+        // Update the loading bar progress every second
+        if (resultMessage === 'Processing...') {
             const intervalId = setInterval(() => {
                 fetch('http://localhost:5174/video/fetch-progress')
                     .then((response) => response.json())
