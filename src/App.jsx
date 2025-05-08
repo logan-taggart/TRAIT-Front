@@ -28,6 +28,12 @@ function App() {
     // Default white
     const [selectedBBColor, setSelectedBBColor] = useState('#FFFFFF');
 
+    // This is used to show the progress of the video processing
+    const [progress, setProgress] = useState({
+        progress_percentage: 0,
+        total_frames: 0,
+    });
+
     const handleSubmit = async () => {
         if (
             (!mainFile || (detectionMode === 'specific' && !referenceFile)) &&
@@ -69,6 +75,11 @@ function App() {
         if (processingMode === 'Image') {
             setImageResultMessage('Processing...');
         } else {
+            // Video processing
+            setProgress({
+                progress_percentage: 0,
+                total_frames: 0,
+            });
             setVideoResultMessage('Processing...');
         }
 
@@ -206,6 +217,8 @@ function App() {
                         resultMessage={videoResultMessage}
                         videoData={videoData}
                         boundingBoxInfo={boundingBoxInfo}
+                        progress={progress}
+                        setProgress={setProgress}
                     />
                 </div>
             </div>

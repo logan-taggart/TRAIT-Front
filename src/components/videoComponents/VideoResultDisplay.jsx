@@ -3,7 +3,12 @@ import { useState, useEffect } from 'react';
 import VideoResultDetails from './VideoResultDetails';
 import ProgressBar from './ProgressBar';
 
-const VideoResultDisplay = ({ resultMessage, videoData }) => {
+const VideoResultDisplay = ({
+    resultMessage,
+    videoData,
+    progress,
+    setProgress,
+}) => {
     // if (resultMessage === "Processing..." && !videoURL) {
     //     console.log("Haiiii")
     //     return <span class="loading loading-ring loading-md"></span>;
@@ -12,11 +17,6 @@ const VideoResultDisplay = ({ resultMessage, videoData }) => {
     if (!resultMessage) {
         return null;
     }
-
-    const [progress, setProgress] = useState({
-        progress_percentage: 0,
-        total_frames: 0,
-    });
 
     useEffect(() => {
         // Update the loading bar progress every second
