@@ -1,6 +1,6 @@
-import React from 'react'
-import ToolTipDropDown from './ToolTipDropDown'
-import ColorPalette from './ColorPalette'
+import React from 'react';
+import ToolTipDropDown from './ToolTipDropDown';
+import ColorPalette from './ColorPalette';
 
 const ThresholdInput = ({
     boundingThreshold,
@@ -11,7 +11,7 @@ const ThresholdInput = ({
     setSelectedBBColor,
 }) => {
     const handleInputChange = (e) => {
-        const value = e.target.value
+        const value = e.target.value;
 
         // Allow the value to be a valid float (with one decimal) or empty
         if (
@@ -20,22 +20,22 @@ const ThresholdInput = ({
             (!isNaN(value) && value.indexOf('.') === value.lastIndexOf('.')) // Ensure only one decimal point
         ) {
             // Parse the value as a float
-            const parsedValue = parseFloat(value)
+            const parsedValue = parseFloat(value);
 
             // Ensure the value is within the range [0, 100]
             if (!isNaN(parsedValue)) {
                 if (parsedValue <= 0) {
-                    setBoundingThreshold(0)
+                    setBoundingThreshold(1);
                 } else if (parsedValue >= 100) {
-                    setBoundingThreshold(100)
+                    setBoundingThreshold(100);
                 } else {
-                    setBoundingThreshold(value)
+                    setBoundingThreshold(value);
                 }
             } else if (value === '') {
-                setBoundingThreshold('') // Allow the input to be empty
+                setBoundingThreshold(''); // Allow the input to be empty
             }
         }
-    }
+    };
 
     // Input field and range slider for the threshold
     return (
@@ -59,14 +59,14 @@ const ThresholdInput = ({
 
             <input
                 type="range"
-                min="0"
+                min="1"
                 max="100"
                 value={boundingThreshold}
                 onChange={(e) => setBoundingThreshold(e.target.value)}
                 className="range range-primary"
             />
         </div>
-    )
-}
+    );
+};
 
-export default ThresholdInput
+export default ThresholdInput;
