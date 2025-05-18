@@ -48,6 +48,7 @@
                 "to": "backend/"
             }
         ],
+        "icon": "./public/TRAIT_logo_circle",
         "mac": {
             "target": "dmg",
             "identity": null
