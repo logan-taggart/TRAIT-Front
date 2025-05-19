@@ -21,7 +21,9 @@ function App() {
     const [imageUrl, setImageUrl] = useState('None');
     const [imageResultMessage, setImageResultMessage] = useState('');
     const [videoResultMessage, setVideoResultMessage] = useState('');
-    const [boundingBoxInfo, setBoundingBoxInfo] = useState([]);
+    const [boundingBoxInfoImage, setBoundingBoxInfoImage] = useState([]);
+    const [boundingBoxInfoVideo, setBoundingBoxInfoVideo] = useState([]);
+
     const [processingMode, setProcessingMode] = useState('Image');
     const [videoData, setVideoData] = useState('None');
 
@@ -70,8 +72,8 @@ function App() {
         formData.append('bb_color', selectedBBColor);
 
         // Reset previous result state
-        setImageUrl('None');
-        setBoundingBoxInfo([]);
+        // setImageUrl('None');
+        // setBoundingBoxInfo([]);
         if (processingMode === 'Image') {
             setImageResultMessage('Processing...');
         } else {
@@ -119,12 +121,12 @@ function App() {
                 // Save the image url from the data object.
                 if (processingMode === 'Image') {
                     setImageUrl(`data:image/jpeg;base64,${data.image}`);
-                    setBoundingBoxInfo(data.bounding_boxes);
+                    setBoundingBoxInfoImage(data.bounding_boxes);
                     setImageResultMessage('Processing completed successfully!');
                 } else {
                     // Video processing
                     setVideoData(data);
-                    setBoundingBoxInfo(data.bounding_boxes);
+                    setBoundingBoxInfoVideo(data.bounding_boxes);
                     setVideoResultMessage('Processing completed successfully!');
                 }
             } else {
@@ -216,7 +218,7 @@ function App() {
                     <VideoResultDisplay
                         resultMessage={videoResultMessage}
                         videoData={videoData}
-                        boundingBoxInfo={boundingBoxInfo}
+                        boundingBoxInfo={boundingBoxInfoVideo}
                         progress={progress}
                         setProgress={setProgress}
                     />
@@ -261,7 +263,7 @@ function App() {
                     <ResultDisplay
                         resultMessage={imageResultMessage}
                         imageUrl={imageUrl}
-                        boundingBoxInfo={boundingBoxInfo}
+                        boundingBoxInfo={boundingBoxInfoImage}
                     />
                 </div>
             </div>

@@ -40,7 +40,8 @@ const ResultDetails = ({ boundingBoxInfo = [] }) => {
                             the main image.
                             {box.confidence && (
                                 <div>
-                                    Confidence: {getConfidenceScore(box.confidence)}
+                                    Confidence:{' '}
+                                    {getConfidenceScore(box.confidence)}
                                 </div>
                             )}
                         </div>
