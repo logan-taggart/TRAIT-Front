@@ -31,29 +31,33 @@ const VideoResultDetails = ({
         <fieldset className="fieldset w-l bg-base-200 border border-base-200 p-6 rounded-box justify-center mb-4">
             <legend className="fieldset-legend">Detected Logo Metrics</legend>
 
-            {visibleFrames.map((frame, index) => (
-                <div key={index} className="flex items-center gap-4 mb-4">
-                    <img
-                        src={`data:image/jpeg;base64,${frame.logo_base64}`}
-                        alt="Cropped Logo"
-                        style={{ maxWidth: '100%', maxHeight: '200px' }}
-                    />
-                    <div className="text-base flex-1">
-                        This logo first appeared in frame {frame.frame_idx} and
-                        was in approximately {appearanceCounts[index] + ' '}
-                        frames of the video.{' '}
-                        {(appearanceCounts[index] / totalFrames).toFixed(3)}% of
-                        the video.
+            {visibleFrames.map((frame, index) => {
+                const count = appearanceCounts[index];
+
+                if (count < 5) return null;
+
+                return (
+                    <div key={index} className="flex items-center gap-4 mb-4">
+                        <img
+                            src={`data:image/jpeg;base64,${frame.logo_base64}`}
+                            alt="Cropped Logo"
+                            style={{ maxWidth: '100%', maxHeight: '200px' }}
+                        />
+                        <div className="text-base flex-1">
+                            This logo first appeared in frame {frame.frame_idx}{' '}
+                            and was in approximately {count} frames of the
+                            video. ({((count / totalFrames) * 100).toFixed(3)}%)
+                        </div>
+                        <button
+                            onClick={() => handleRemove(index)}
+                            className="text-red-500 hover:text-red-700 text-xl font-bold"
+                            title="Remove this logo"
+                        >
+                            ❌
+                        </button>
                     </div>
-                    <button
-                        onClick={() => handleRemove(index)}
-                        className="text-red-500 hover:text-red-700 text-xl font-bold"
-                        title="Remove this logo"
-                    >
-                        ❌
-                    </button>
-                </div>
-            ))}
+                );
+            })}
         </fieldset>
     );
 };
