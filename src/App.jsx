@@ -76,6 +76,7 @@ function App() {
         // setBoundingBoxInfo([]);
         if (processingMode === 'Image') {
             setImageResultMessage('Processing...');
+            setImageUrl('None');
         } else {
             // Video processing
             setProgress({
@@ -218,7 +219,7 @@ function App() {
                     <VideoResultDisplay
                         resultMessage={videoResultMessage}
                         videoData={videoData}
-                        boundingBoxInfo={boundingBoxInfoVideo}
+                        // boundingBoxInfo={boundingBoxInfoVideo}
                         progress={progress}
                         setProgress={setProgress}
                     />
